@@ -34,13 +34,6 @@ El *objetivo* principal es digitalizar y optimizar el proceso de reserva, elimin
 
 ---
 
-## Diagrama de Clases
-
-Hemos construido un diagrama de clases con la herramienta draw.io. El enlace al mismo es (si no les anda avisen y me meto):
-[Diagrama de Clases](https://drive.google.com/file/d/1-VaSZdrrx8pcJE_-489iDjZJPw8mro_p/view?usp=sharing)
-
----
-
 ## Diagrama de Entidades-Relación
 
 Para realizar el DER hemos utilizado la herramienta https://dbdiagram.io/, el diagrama que hemos propuesto es el siguiente (la idea era pegar las imágenes cuando estén listas):
@@ -48,7 +41,14 @@ Para realizar el DER hemos utilizado la herramienta https://dbdiagram.io/, el di
 
 ---
 
-Integrantes del grupo
+## Diagrama de Clases
+
+Hemos construido un diagrama de clases con la herramienta draw.io. El enlace al mismo es (si no les anda avisen y me meto):
+[Diagrama de Clases](https://drive.google.com/file/d/1-VaSZdrrx8pcJE_-489iDjZJPw8mro_p/view?usp=sharing)
+
+---
+
+### Integrantes del grupo
 
 | Legajo | Apellido y Nombre         | mail                            |
 | ------ | ------------------------- | ------------------------------- |
