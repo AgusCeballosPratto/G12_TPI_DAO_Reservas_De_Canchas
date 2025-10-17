@@ -16,21 +16,21 @@ El *objetivo* principal es digitalizar y optimizar el proceso de reserva, elimin
 
 ## Casos de Uso
 
-| Nº   | Caso de Uso                                                      | Descripción de CU                                                                                         |
-| ----- | ---------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| CU 1  | **Registrar Cliente**                                      | Permitir ingresar un nuevo cliente en el sistema validando que el DNI no esté repetido.                  |
-| CU 2  | **Modificar / Eliminar Cliente**                           | Actualizar/elimina datos de clientes existentes.                                                           |
-| CU 3  | **Registrar Cancha**                                       | Crear una nueva cancha con su tipo, costo y servicios asociados.                                           |
-| CU 4  | **Modificar estado de Cancha**                             | Permitir actualizar el estador una cancha.                                                                |
-| CU 5  | **Registrar Reserva**                                      | Crear una reserva vinculando cliente, cancha, fecha y hora. Verificar disponibilidad antes de confirmarla. |
-| CU 6  | **Modificar Reserva**                                      | Permitir cambiar horario o anular una reserva existente.                                                   |
-| CU 7  | **Consultar Disponibilidad**                               | Mostrar las canchas disponibles en una fecha y franja horaria.                                             |
-| CU 8  | **Registrar Torneo**                                       | Permitir crear torneos, asignando canchas y vincular reservas.                                             |
-| CU 9  | **Registrar Pago**                                         | Registrar el pago de una reserva o torneo, indicando monto, fecha y método.                               |
-| CU 10 | **Generar Reporte de Reservas por Cliente**                | Generar reporte con todas las reservas realizadas por un cliente, con fechas y estados.                   |
-| CU 11 | **Generar Reporte de Reservas por Cancha y Período**      | Generar reporte de las reservas de una cancha dentro de un rango de fechas.                                |
-| CU 12 | **Generar Reporte de Canchas más Utilizadas**             | Generar reporte que indica cuáles son las canchas con mayor cantidad de reservas.                         |
-| CU 13 | **Generar Gráfico Estadístico de Utilización Mensual** | Generar gráficos (barras o tortas) con la ocupación mensual de las canchas.                              |
+| Nº  | Caso de Uso                                                      | Descripción de CU                                                                                         |
+| ---- | ---------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| CU1  | **Registrar Cliente**                                      | Permitir ingresar un nuevo cliente en el sistema validando que el DNI no esté repetido.                  |
+| CU2  | **Modificar / Eliminar Cliente**                           | Actualizar/elimina datos de clientes existentes.                                                           |
+| CU3  | **Registrar Cancha**                                       | Crear una nueva cancha con su tipo, costo y servicios asociados.                                           |
+| CU4  | **Modificar estado de Cancha**                             | Permitir actualizar el estador una cancha.                                                                |
+| CU5  | **Registrar Reserva**                                      | Crear una reserva vinculando cliente, cancha, fecha y hora. Verificar disponibilidad antes de confirmarla. |
+| CU6  | **Modificar Reserva**                                      | Permitir cambiar horario o anular una reserva existente.                                                   |
+| CU7  | **Consultar Disponibilidad**                               | Mostrar las canchas disponibles en una fecha y franja horaria.                                             |
+| CU8  | **Registrar Torneo**                                       | Permitir crear torneos, asignando canchas y vincular reservas.                                             |
+| CU9  | **Registrar Pago**                                         | Registrar el pago de una reserva o torneo, indicando monto, fecha y método.                               |
+| CU10 | **Generar Reporte de Reservas por Cliente**                | Generar reporte con todas las reservas realizadas por un cliente, con fechas y estados.                   |
+| CU11 | **Generar Reporte de Reservas por Cancha y Período**      | Generar reporte de las reservas de una cancha dentro de un rango de fechas.                                |
+| CU12 | **Generar Reporte de Canchas más Utilizadas**             | Generar reporte que indica cuáles son las canchas con mayor cantidad de reservas.                         |
+| CU13 | **Generar Gráfico Estadístico de Utilización Mensual** | Generar gráficos (barras o tortas) con la ocupación mensual de las canchas.                              |
 
 ---
 
