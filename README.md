@@ -16,6 +16,8 @@ El *objetivo* principal es digitalizar y optimizar el proceso de reserva, elimin
 
 ## Casos de Uso
 
+Las funcionalidades que proponemos resolver son las que listamos en la siguiente tabla:
+
 | Nº  | Caso de Uso                                                      | Descripción de CU                                                                                         |
 | ---- | ---------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
 | CU1  | **Registrar Cliente**                                      | Permitir ingresar un nuevo cliente en el sistema validando que el DNI no esté repetido.                  |
@@ -36,15 +38,15 @@ El *objetivo* principal es digitalizar y optimizar el proceso de reserva, elimin
 
 ## Diagrama de Entidades-Relación
 
-Para realizar el DER hemos utilizado la herramienta https://dbdiagram.io/, el diagrama que hemos propuesto es el siguiente (la idea era pegar las imágenes cuando estén listas):
-[DER](https://dbdiagram.io/d/G12_TPI_DAO_DER-68f24e972e68d21b41ff473d)
+Para realizar el DER hemos utilizado la herramienta dbdiagram.io, el diagrama que hemos propuesto es el siguiente:
+![1760823936379](image/README/1760823936379.png)
 
 ---
 
 ## Diagrama de Clases
 
-Hemos construido un diagrama de clases con la herramienta draw.io. El enlace al mismo es (si no les anda avisen y me meto):
-[Diagrama de Clases](https://drive.google.com/file/d/1-VaSZdrrx8pcJE_-489iDjZJPw8mro_p/view?usp=sharing)
+Hemos construido un diagrama de clases con la herramienta draw.io. El diagrama que propusimos es el siguiente:
+![1760823996611](image/README/1760823996611.png)
 
 ---
 
