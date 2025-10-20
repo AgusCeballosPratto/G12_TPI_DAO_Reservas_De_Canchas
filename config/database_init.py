@@ -1,0 +1,94 @@
+import sqlite3
+
+# Creacion de todas las tablas 
+def crear_tablas(cursor):
+    """Crear todas las tablas necesarias para el sistema"""
+    
+    # Tabla estados
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS estados (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nombre TEXT NOT NULL,
+            ambito INTEGER NOT NULL
+        )
+    """)
+    
+    # Tabla clientes
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS clientes (
+            dni INTEGER PRIMARY KEY,
+            nombre TEXT,
+            apellido TEXT,
+            email TEXT,
+            telefono INTEGER
+        )
+    """)
+    
+    # Tabla canchas
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS canchas (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nombre TEXT NOT NULL,
+            tipo TEXT,
+            costo_por_hora REAL,
+            capacidad INTEGER,
+            estado_id INTEGER NOT NULL
+        )
+    """)
+    
+    # Tabla reservas
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS reservas (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            cliente_id INTEGER NOT NULL,
+            cancha_id INTEGER NOT NULL,
+            fecha TEXT NOT NULL,
+            hora_inicio TEXT NOT NULL,
+            hora_fin TEXT NOT NULL,
+            estado_id INTEGER NOT NULL,
+            tiene_iluminacion BOOLEAN DEFAULT 0,
+            tiene_arbitro BOOLEAN DEFAULT 0,
+            FOREIGN KEY(cliente_id) REFERENCES clientes(dni),
+            FOREIGN KEY(cancha_id) REFERENCES canchas(id),
+            FOREIGN KEY(estado_id) REFERENCES estados(id)
+        )
+    """)
+
+# Inicializacion de datos para la tabla estados
+def insertar_datos_iniciales(cursor, conn):
+    try:
+        cursor.execute("SELECT COUNT(*) FROM estados")
+        if cursor.fetchone()[0] == 0:
+            estados_iniciales = [
+                ('Libre', '2'),        
+                ('Ocupada', '2'),      
+                ('Activa', '1'),       
+                ('Finalizada', '1')    
+            ]
+            
+            cursor.executemany("""
+                INSERT INTO estados (nombre, ambito) VALUES (?, ?)
+            """, estados_iniciales)
+                
+        conn.commit()
+        
+    except Exception as e:
+        print(f"Error al insertar datos iniciales: {e}")
+        conn.rollback()
+
+def inicializar_sistema_base_datos(db_name):
+    try:
+        conn = sqlite3.connect(db_name)
+        conn.execute("PRAGMA foreign_keys = ON")
+        cursor = conn.cursor()
+        
+        crear_tablas(cursor)
+        insertar_datos_iniciales(cursor, conn)
+        
+        conn.commit()
+        conn.close()
+        
+    except Exception as e:
+        print(f"Error al inicializar la base de datos: {e}")
+        if conn:
+            conn.close()

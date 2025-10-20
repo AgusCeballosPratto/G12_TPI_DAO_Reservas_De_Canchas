@@ -1,4 +1,11 @@
 import sqlite3
+import sys
+import os
+
+# Configurar path para encontrar modelos
+src_dir = os.path.dirname(os.path.dirname(__file__))
+sys.path.insert(0, src_dir)
+
 from models.cancha import Cancha
 
 class CanchaDAO:

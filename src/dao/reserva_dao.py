@@ -1,21 +1,17 @@
+import sqlite3
+import sys
+import os
+
+# Configurar path para encontrar modelos
+src_dir = os.path.dirname(os.path.dirname(__file__))
+sys.path.insert(0, src_dir)
+
 from models.reserva import Reserva
-from db.database_config import get_connection
-from dao.cliente_dao import ClienteDAO
-from dao.cancha_dao import CanchaDAO
-from dao.estado_dao import EstadoDAO
-from dao.torneo_dao import TorneoDAO
-from dao.pago_dao import PagoDAO
 
 class ReservaDAO:
-    def __init__(self):
-        self.conn = get_connection()
+    def __init__(self, db_path="reservasdecanchas.db"):
+        self.conn = sqlite3.connect(db_path)
         self.cursor = self.conn.cursor()
-        # Instancias para validaciones
-        self.cliente_dao = ClienteDAO()
-        self.cancha_dao = CanchaDAO()
-        self.estado_dao = EstadoDAO()
-        self.torneo_dao = TorneoDAO()
-        self.pago_dao = PagoDAO()
         self.crear_tabla()
 
     def crear_tabla(self):
@@ -24,18 +20,16 @@ class ReservaDAO:
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 cliente_id INTEGER NOT NULL,
                 cancha_id INTEGER NOT NULL,
-                torneo_id INTEGER,
-                estado_id INTEGER NOT NULL,
-                pagos_id INTEGER,
                 fecha TEXT NOT NULL,
                 hora_inicio TEXT NOT NULL,
                 hora_fin TEXT NOT NULL,
+                estado_id INTEGER NOT NULL,
+                tiene_iluminacion BOOLEAN DEFAULT 0,
+                tiene_arbitro BOOLEAN DEFAULT 0,
+                created_at TEXT DEFAULT (datetime('now')),
                 FOREIGN KEY(cliente_id) REFERENCES clientes(dni),
                 FOREIGN KEY(cancha_id) REFERENCES canchas(id),
-                FOREIGN KEY(torneo_id) REFERENCES torneos(id),
-                FOREIGN KEY(estado_id) REFERENCES estados(id),
-                FOREIGN KEY(pagos_id) REFERENCES pagos(id),
-                FOREIGN KEY(servicio_id) REFERENCES servicios(id)
+                FOREIGN KEY(estado_id) REFERENCES estados(id)
             )
         """)
         self.conn.commit()

@@ -1,9 +1,16 @@
+import sqlite3
+import sys
+import os
+
+# Configurar path para encontrar modelos
+src_dir = os.path.dirname(os.path.dirname(__file__))
+sys.path.insert(0, src_dir)
+
 from models.estado import Estado
-from db.database_config import get_connection
 
 class EstadoDAO:
-    def __init__(self):
-        self.conn = get_connection()
+    def __init__(self, db_path="reservasdecanchas.db"):
+        self.conn = sqlite3.connect(db_path)
         self.cursor = self.conn.cursor()
         self.crear_tabla()
 
