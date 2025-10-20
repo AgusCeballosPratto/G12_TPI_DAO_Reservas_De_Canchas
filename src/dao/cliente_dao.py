@@ -1,26 +1,24 @@
 import sqlite3
 import sys
 import os
+from dao.base_dao import IBaseDAO
+from models.cliente import Cliente
 
 # Configurar path para encontrar modelos
 src_dir = os.path.dirname(os.path.dirname(__file__))
 sys.path.insert(0, src_dir)
 
-from models.cliente import Cliente
 
-class ClienteDAO:
+class ClienteDAO(IBaseDAO):
     def __init__(self, db_path="reservasdecanchas.db"):
         self.conn = sqlite3.connect(db_path)
         self.cursor = self.conn.cursor()
         
-    def existe(self, dni):
-        self.cursor.execute("SELECT * FROM clientes WHERE dni = ?", (dni,))
+    def existe(self, id):
+        self.cursor.execute("SELECT * FROM clientes WHERE dni = ?", (id,))
         return self.cursor.fetchone() is not None
-    
-    
 
-
-    def alta(self, cliente: Cliente):
+    def alta(self, cliente):
         self.cursor.execute("""
             INSERT INTO clientes (dni, nombre, apellido, email, telefono)
             VALUES (?, ?, ?, ?, ?)
@@ -31,18 +29,18 @@ class ClienteDAO:
         self.cursor.execute("SELECT * FROM clientes")
         return self.cursor.fetchall()
     
-    def listar_id(self, dni):
-        self.cursor.execute("SELECT * FROM clientes WHERE dni = ?", (dni,))
+    def listar_id(self, id):
+        self.cursor.execute("SELECT * FROM clientes WHERE dni = ?", (id,))
         return self.cursor.fetchone()
 
-    def modificar(self, dni, nuevo_email, nuevo_telefono):
+    def modificar(self, id, nuevo_email, nuevo_telefono):
         self.cursor.execute("""
             UPDATE clientes
             SET email = ?, telefono = ?
             WHERE dni = ?
-        """, (nuevo_email, nuevo_telefono, dni))
+        """, (nuevo_email, nuevo_telefono, id))
         self.conn.commit()
 
-    def borrar(self, dni):
-        self.cursor.execute("DELETE FROM clientes WHERE dni = ?", (dni,))
+    def borrar(self, id):
+        self.cursor.execute("DELETE FROM clientes WHERE dni = ?", (id,))
         self.conn.commit()

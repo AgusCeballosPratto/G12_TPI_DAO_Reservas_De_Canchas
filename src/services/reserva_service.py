@@ -64,10 +64,15 @@ class ReservaService:
             
      
     # Consulta (listado y busqueda)
-    def mostrar_canchas(self):
-        pass
+    def mostrar_reservas(self):
+        reserva_dao = ReservaDAO()
+        reservas = reserva_dao.listar()
+        for reserva in reservas:
+            print(reserva) # borrar despues
     
     def mostrar_reserva_id(self, id_reserva):
-        pass
+        reserva_dao = ReservaDAO()
+        reserva = reserva_dao.listar_id(id_reserva)
+        print(reserva) #borrar despues
     
     

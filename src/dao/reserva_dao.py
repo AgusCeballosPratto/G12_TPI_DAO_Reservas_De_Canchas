@@ -1,19 +1,18 @@
 import sqlite3
 import sys
 import os
-from datetime import date, time
+from dao.base_dao import IBaseDAO
+from models.reserva import Reserva
 
 # Configurar path para encontrar modelos
 src_dir = os.path.dirname(os.path.dirname(__file__))
 sys.path.insert(0, src_dir)
 
-from models.reserva import Reserva
 
-class ReservaDAO:
+class ReservaDAO(IBaseDAO):
     def __init__(self, db_path="reservasdecanchas.db"):
         self.conn = sqlite3.connect(db_path)
         self.cursor = self.conn.cursor()
-
 
     def existe(self, id):
         self.cursor.execute("SELECT * FROM reservas WHERE id = ?", (id,))
@@ -46,26 +45,28 @@ class ReservaDAO:
             return False
 
 
-    def alta(self, reserva: Reserva):
+    def alta(self, reserva):
         self.cursor.execute("""
             INSERT INTO reservas (cliente_id, cancha_id, estado_id, fecha, hora_inicio, hora_fin, tiene_iluminacion, tiene_arbitro)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         """, (reserva.cliente_id, reserva.cancha_id, reserva.estado_id, reserva.fecha, reserva.hora_inicio, reserva.hora_fin, reserva.tiene_iluminacion, reserva.tiene_arbitro))
         self.conn.commit()
 
-
     def listar(self):
         self.cursor.execute("SELECT * FROM reservas")
         return self.cursor.fetchall()
+    
+    def listar_id(self, id):
+        self.cursor.execute("SELECT * FROM reservas WHERE id = ?", (id,))
+        return self.cursor.fetchone()
 
-    def modificar(self, id_reserva):
+    def modificar(self, id):
         self.cursor.execute("""
             UPDATE reservas
             SET estado_id = 4
             WHERE id = ?
-        """, (id_reserva,))
+        """, (id,))
         self.conn.commit()
-
 
     def borrar(self, id):
         self.cursor.execute("DELETE FROM reservas WHERE id = ?", (id,))

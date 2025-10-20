@@ -57,7 +57,10 @@ def main():
      
     # Modificacion
     #reserva_service.finalizar_reserva_id(1)
+    
     # Consulta (listado y busqueda)
+    #reserva_service.mostrar_reservas()
+    #reserva_service.mostrar_reserva_id(6)
     
     
     
@@ -94,7 +97,7 @@ def main():
     # listado
     #cliente_service.mostrar_clientes()
     # busqueda
-    #cliente_service.mostrar_cliente_id("9812312")
+    #cliente_service.mostrar_cliente_id("11")
     
     
     
