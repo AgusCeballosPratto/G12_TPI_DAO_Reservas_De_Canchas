@@ -13,18 +13,6 @@ class CanchaDAO:
         self.conn = sqlite3.connect(db_path)
         self.cursor = self.conn.cursor()
 
-    def crear_tabla(self):
-        self.cursor.execute("""
-            CREATE TABLE IF NOT EXISTS canchas (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                nombre TEXT NOT NULL,
-                tipo TEXT,
-                costo_por_hora REAL,
-                capacidad INTEGER,
-                estado_id INTEGER NOT NULL
-            )
-        """)
-        self.conn.commit()
 
     def existe(self, id):
         self.cursor.execute("SELECT * FROM canchas WHERE id = ?", (id,))
@@ -33,21 +21,25 @@ class CanchaDAO:
     
     def alta(self, cancha: Cancha):
         self.cursor.execute("""
-            INSERT INTO canchas (nombre, tipo, costo_por_hora, capacidad, estado_id)
-            VALUES (?, ?, ?, ?, ?)
-        """, (cancha.nombre, cancha.tipo, cancha.costo_por_hora, cancha.capacidad, cancha.estado_id))
+            INSERT INTO canchas (nombre, tipo, costo_por_hora, estado_id)
+            VALUES (?, ?, ?, ?)
+        """, (cancha.nombre, cancha.tipo, cancha.costo_por_hora, cancha.estado_id))
         self.conn.commit()
 
     def listar(self):
         self.cursor.execute("SELECT * FROM canchas")
         return self.cursor.fetchall()
+    
+    def listar_id(self, id_cancha):
+        self.cursor.execute("SELECT * FROM canchas WHERE id = ?", (id_cancha,))
+        return self.cursor.fetchone()
 
-    def modificar(self, id, nuevo_nombre, nuevo_tipo, nuevo_costo, nueva_capacidad):
+    def modificar(self, id, nuevo_nombre, nuevo_tipo, nuevo_costo):
         self.cursor.execute("""
             UPDATE canchas
-            SET nombre = ?, tipo = ?, costo_por_hora = ?, capacidad = ?
+            SET nombre = ?, tipo = ?, costo_por_hora = ?
             WHERE id = ?
-        """, (nuevo_nombre, nuevo_tipo, nuevo_costo, nueva_capacidad, id))
+        """, (nuevo_nombre, nuevo_tipo, nuevo_costo, id))
         self.conn.commit()
 
     def borrar(self, id):

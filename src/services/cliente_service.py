@@ -1,7 +1,7 @@
 from dao.cliente_dao import ClienteDAO
 import re
 
-class ClienteService():   
+class ClienteService:   
     
     # Alta 
     def crear_cliente(self, cliente):

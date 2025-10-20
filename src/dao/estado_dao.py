@@ -14,16 +14,6 @@ class EstadoDAO:
         self.cursor = self.conn.cursor()
         self.crear_tabla()
 
-    def crear_tabla(self):
-        self.cursor.execute("""
-            CREATE TABLE IF NOT EXISTS estados (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                nombre TEXT NOT NULL,
-                ambito INTEGER NOT NULL
-            )
-        """)
-        self.conn.commit()
-
     def alta(self, estado: Estado):
         self.cursor.execute(
             "INSERT INTO estados (nombre, ambito) VALUES (?, ?)",

@@ -14,26 +14,6 @@ class ReservaDAO:
         self.cursor = self.conn.cursor()
         self.crear_tabla()
 
-    def crear_tabla(self):
-        self.cursor.execute("""
-            CREATE TABLE IF NOT EXISTS reservas (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                cliente_id INTEGER NOT NULL,
-                cancha_id INTEGER NOT NULL,
-                fecha TEXT NOT NULL,
-                hora_inicio TEXT NOT NULL,
-                hora_fin TEXT NOT NULL,
-                estado_id INTEGER NOT NULL,
-                tiene_iluminacion BOOLEAN DEFAULT 0,
-                tiene_arbitro BOOLEAN DEFAULT 0,
-                created_at TEXT DEFAULT (datetime('now')),
-                FOREIGN KEY(cliente_id) REFERENCES clientes(dni),
-                FOREIGN KEY(cancha_id) REFERENCES canchas(id),
-                FOREIGN KEY(estado_id) REFERENCES estados(id)
-            )
-        """)
-        self.conn.commit()
-
     def existe(self, id):
         self.cursor.execute("SELECT * FROM reservas WHERE id = ?", (id,))
         return self.cursor.fetchone() is not None

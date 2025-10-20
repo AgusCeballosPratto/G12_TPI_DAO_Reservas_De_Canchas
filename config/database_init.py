@@ -31,7 +31,6 @@ def crear_tablas(cursor):
             nombre TEXT NOT NULL,
             tipo TEXT,
             costo_por_hora REAL,
-            capacidad INTEGER,
             estado_id INTEGER NOT NULL
         )
     """)

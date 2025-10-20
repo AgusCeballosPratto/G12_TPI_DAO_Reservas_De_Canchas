@@ -30,7 +30,7 @@ from models.reserva import Reserva
 
 # Importaciones de los services 
 from services.cliente_service import ClienteService
-#from services.cancha_service import CanchaService
+from services.cancha_service import CanchaService
 #from services.reserva_service import ReservaService
 
 # Agregar el directorio src al path para importaciones
@@ -43,10 +43,26 @@ def main():
     # Inicializacion de los services
     cliente_service = ClienteService()
     #reserva_service = ReservaService()
-    #cancha_service = CanchaService()
+    cancha_service = CanchaService()
     
     # Inicializacion de los modelos
     cliente_1 = Cliente("98765432", "PEDRO", "Wendler", "juan@gmail.com", "12345678")
+    cancha_1 = Cancha("Cancha Central", "Futbol", 5000)
+    
+    # ABMC Cancha
+    
+    # Alta
+    # cancha_service.crear_cancha(cancha_1)
+    
+    # Baja 
+    # cancha_service.eliminar_cancha_id(1)
+    
+    # Modificacion
+    # cancha_service.modificar_cancha_id(2)
+    
+    # Consulta (listado y busqueda)
+    #cancha_service.mostrar_canchas()
+    #cancha_service.mostrar_cancha_id(2)
     
     # ABMC Cliente
     
@@ -73,12 +89,7 @@ def main():
     # Modificacion
     # Consulta (listado y busqueda)
     
-    # ABMC Cancha
     
-    # Alta
-    # Baja 
-    # Modificacion
-    # Consulta (listado y busqueda)
     
     
     
