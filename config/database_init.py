@@ -46,7 +46,7 @@ def crear_tablas(cursor):
             hora_fin TEXT NOT NULL,
             estado_id INTEGER NOT NULL,
             tiene_iluminacion BOOLEAN DEFAULT 0,
-            tiene_arbitro BOOLEAN DEFAULT 0,
+            tiene_arbitro BOOLEAN DEFAULT 0, 
             FOREIGN KEY(cliente_id) REFERENCES clientes(dni),
             FOREIGN KEY(cancha_id) REFERENCES canchas(id),
             FOREIGN KEY(estado_id) REFERENCES estados(id)

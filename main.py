@@ -17,12 +17,6 @@ sys.path.insert(0, config_dir)
 # Importaciones de configuración de la BD
 from config.database_config import init_database
 
-# Importaciones de DAOs
-from dao.cliente_dao import ClienteDAO
-from dao.cancha_dao import CanchaDAO  
-from dao.reserva_dao import ReservaDAO
-from dao.estado_dao import EstadoDAO
-
 # Importaciones de modelos
 from models.cliente import Cliente
 from models.cancha import Cancha
@@ -31,7 +25,7 @@ from models.reserva import Reserva
 # Importaciones de los services 
 from services.cliente_service import ClienteService
 from services.cancha_service import CanchaService
-#from services.reserva_service import ReservaService
+from services.reserva_service import ReservaService
 
 # Agregar el directorio src al path para importaciones
 sys.path.append(os.path.join(os.path.dirname(__file__), 'src'))
@@ -42,17 +36,36 @@ def main():
     
     # Inicializacion de los services
     cliente_service = ClienteService()
-    #reserva_service = ReservaService()
+    reserva_service = ReservaService()
     cancha_service = CanchaService()
     
     # Inicializacion de los modelos
     cliente_1 = Cliente("98765432", "PEDRO", "Wendler", "juan@gmail.com", "12345678")
     cancha_1 = Cancha("Cancha Central", "Futbol", 5000)
+    reserva_1 = Reserva("98765432", 1, "2025-10-23", "15:00", "16:00", True, False)
+    reserva_2 = Reserva("98765432", 2, "2025-10-24", "16:10", "17:00", False, True)
+    
+    # ABMC Reserva
+    
+    # Alta
+    #reserva_service.crear_reserva(reserva_1)
+    #reserva_service.crear_reserva(reserva_2)
+    #reserva_service.crear_reserva(reserva_1)
+    
+    # Baja
+    #reserva_service.eliminar_reserva_id(7)
+     
+    # Modificacion
+    #reserva_service.finalizar_reserva_id(1)
+    # Consulta (listado y busqueda)
+    
+    
+    
     
     # ABMC Cancha
     
     # Alta
-    # cancha_service.crear_cancha(cancha_1)
+    #cancha_service.crear_cancha(cancha_1)
     
     # Baja 
     # cancha_service.eliminar_cancha_id(1)
@@ -82,12 +95,6 @@ def main():
     #cliente_service.mostrar_clientes()
     # busqueda
     #cliente_service.mostrar_cliente_id("9812312")
-    # ABMC Reserva
-    
-    # Alta
-    # Baja 
-    # Modificacion
-    # Consulta (listado y busqueda)
     
     
     
