@@ -27,6 +27,9 @@ from services.cliente_service import ClienteService
 from services.cancha_service import CanchaService
 from services.reserva_service import ReservaService
 
+# Import de controlador
+from controller.controlador_reservas import ControladorReservas
+
 # Agregar el directorio src al path para importaciones
 sys.path.append(os.path.join(os.path.dirname(__file__), 'src'))
 
@@ -44,7 +47,6 @@ def main():
     cancha_1 = Cancha("Cancha Central", "Futbol", 5000)
     reserva_1 = Reserva("98765432", 1, "2025-10-23", "15:00", "16:00", True, False)
     reserva_2 = Reserva("98765432", 2, "2025-10-24", "16:10", "17:00", False, True)
-    
     # ABMC Reserva
     
     # Alta
