@@ -95,3 +95,23 @@ class ReservaDAO(IBaseDAO):
         """, (fecha_inicio, fecha_fin, fecha_inicio, fecha_fin))
         return self.cursor.fetchall()
     
+    # Reporte de canchas mas utilizadas
+    def canchas_mas_utilizadas(self):
+        self.cursor.execute("""
+            SELECT c.nombre, COUNT(r.id) as total_reservas
+            FROM reservas r
+            JOIN canchas c ON r.cancha_id = c.id
+            GROUP BY c.id, c.nombre
+            ORDER BY total_reservas DESC
+        """)
+        return self.cursor.fetchall()
+    
+    # Datos para reporte grafico utilizacion mensual de canchas
+    def grafico_utilizacion_mensual_canchas(self):
+        self.cursor.execute("""
+            SELECT strftime('%Y-%m', r.fecha) as mes, COUNT(r.id) as total_reservas
+            FROM reservas r
+            GROUP BY mes
+            ORDER BY mes
+        """)
+        return self.cursor.fetchall()

@@ -66,10 +66,10 @@ class ControladorReservas:
         return self.reportes_service.reservas_por_cancha_en_periodo(fecha_inicio, fecha_fin)
     
     def canchas_mas_utilizadas(self):
-        pass
+        return self.reportes_service.canchas_mas_utilizadas()
     
     def grafico_utilizacion_mensual_canchas(self):
-        pass
+        return self.reportes_service.grafico_utilizacion_mensual_canchas()
 
 def controlador_reservas():
     return ControladorReservas()

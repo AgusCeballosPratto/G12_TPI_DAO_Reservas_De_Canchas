@@ -49,11 +49,13 @@ def main():
     cliente_1 = Cliente("12345678", "MARIA", "Wendler", "juan@gmail.com", "12345678")
     cancha_1 = Cancha("Cancha Central", "Futbol", 5000)
     reserva_1 = Reserva("12345678", 1, "2025-10-30", "15:00", "16:00", True, False)
-    reserva_2 = Reserva("98765432", 2, "2025-10-24", "16:10", "17:00", False, True)
+    reserva_2 = Reserva("98765432", 1, "2025-12-24", "16:10", "17:00", False, True)
     
     # Reportes
     controlador.reservas_por_cliente()
     controlador.reservas_por_cancha_en_periodo("2024-10-01", "2025-10-23")
+    controlador.canchas_mas_utilizadas()
+    controlador.grafico_utilizacion_mensual_canchas()
     
     # ABMC Reserva
     
