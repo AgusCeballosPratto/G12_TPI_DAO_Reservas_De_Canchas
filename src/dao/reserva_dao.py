@@ -71,3 +71,16 @@ class ReservaDAO(IBaseDAO):
     def borrar(self, id):
         self.cursor.execute("DELETE FROM reservas WHERE id = ?", (id,))
         self.conn.commit()
+    
+    # Reportes 
+    
+    # Reserva por cliente (devuelve dni, nombre, apellido y total de reservas)
+    def reservas_por_cliente(self):
+        self.cursor.execute("""
+            SELECT c.dni, c.nombre, c.apellido, COUNT(*) as total_reservas
+            FROM reservas r
+            JOIN clientes c ON r.cliente_id = c.dni
+            GROUP BY c.dni, c.nombre, c.apellido
+            ORDER BY total_reservas DESC
+        """)
+        return self.cursor.fetchall()

@@ -37,16 +37,23 @@ def main():
     # Creacion de la base de datos, tablas y datos iniciales
     init_database()
     
+    # Inicializacion del controlador
+    controlador = ControladorReservas()
+    
     # Inicializacion de los services
     cliente_service = ClienteService()
     reserva_service = ReservaService()
     cancha_service = CanchaService()
     
     # Inicializacion de los modelos
-    cliente_1 = Cliente("98765432", "PEDRO", "Wendler", "juan@gmail.com", "12345678")
+    cliente_1 = Cliente("12345678", "MARIA", "Wendler", "juan@gmail.com", "12345678")
     cancha_1 = Cancha("Cancha Central", "Futbol", 5000)
-    reserva_1 = Reserva("98765432", 1, "2025-10-23", "15:00", "16:00", True, False)
+    reserva_1 = Reserva("12345678", 1, "2025-10-30", "15:00", "16:00", True, False)
     reserva_2 = Reserva("98765432", 2, "2025-10-24", "16:10", "17:00", False, True)
+    
+    # Reportes
+    controlador.reservas_por_cliente()
+    
     # ABMC Reserva
     
     # Alta

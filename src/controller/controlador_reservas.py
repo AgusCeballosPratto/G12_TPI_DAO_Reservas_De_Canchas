@@ -1,12 +1,14 @@
 from src.services.reserva_service import ReservaService
 from src.services.cancha_service import CanchaService
 from src.services.cliente_service import ClienteService
+from src.reports.reportes import ReportesService
 
 class ControladorReservas:
     def __init__(self):
         self.reserva_service = ReservaService()
         self.cancha_service = CanchaService()
         self.cliente_service = ClienteService()
+        self.reportes_service = ReportesService()
     
     # Métodos para Reservas
     def crear_reserva(self, reserva):
@@ -55,6 +57,19 @@ class ControladorReservas:
     
     def eliminar_cliente(self, dni):
         return self.cliente_service.eliminar_cliente_id(dni)
+    
+    # Reportes
+    def reservas_por_cliente(self):
+        return self.reportes_service.reservas_por_cliente()
+    
+    def reservas_por_cancha_en_periodo(self):
+        pass
+    
+    def canchas_mas_utilizadas(self):
+        pass
+    
+    def grafico_utilizacion_mensual_canchas(self):
+        pass
 
 def controlador_reservas():
     return ControladorReservas()
