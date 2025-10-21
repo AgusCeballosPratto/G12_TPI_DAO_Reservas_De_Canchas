@@ -74,7 +74,7 @@ class ReservaDAO(IBaseDAO):
     
     # Reportes 
     
-    # Reserva por cliente (devuelve dni, nombre, apellido y total de reservas)
+    # Reserva por cliente 
     def reservas_por_cliente(self):
         self.cursor.execute("""
             SELECT c.dni, c.nombre, c.apellido, COUNT(*) as total_reservas
@@ -84,3 +84,14 @@ class ReservaDAO(IBaseDAO):
             ORDER BY total_reservas DESC
         """)
         return self.cursor.fetchall()
+    
+    # Reserva por cancha en periodo 
+    def reservas_por_cancha_en_periodo(self, fecha_inicio, fecha_fin):
+        self.cursor.execute("""
+            SELECT ? as fecha_inicio, ? as fecha_fin, COUNT(*) as total_reservas
+            FROM reservas r
+            WHERE r.fecha BETWEEN ? AND ?
+            GROUP BY r.cancha_id
+        """, (fecha_inicio, fecha_fin, fecha_inicio, fecha_fin))
+        return self.cursor.fetchall()
+    

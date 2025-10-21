@@ -1,6 +1,6 @@
 from dao.reserva_dao import ReservaDAO
 from fpdf import FPDF 
-
+from datetime import date
 
 class ReportesService:
     def __init__(self):
@@ -9,12 +9,14 @@ class ReportesService:
     # tipo_reporte = 1
     def reservas_por_cliente(self):
         datos = self.reserva_dao.reservas_por_cliente()
-        datos_formateados = self.formatear_datos(datos)
+        datos_formateados = self.formatear_datos(datos, tipo_reporte=1)
         self.generar_reporte_pdf(datos_formateados, tipo_reporte=1)
 
     # tipo_reporte = 2
-    def reservas_por_cancha_en_periodo(self, cancha_id, fecha_inicio, fecha_fin):
-        pass
+    def reservas_por_cancha_en_periodo(self, fecha_inicio, fecha_fin):
+        datos = self.reserva_dao.reservas_por_cancha_en_periodo(fecha_inicio, fecha_fin)
+        datos_formateados = self.formatear_datos(datos, tipo_reporte=2)
+        self.generar_reporte_pdf(datos_formateados, tipo_reporte=2)
 
     # tipo_reporte = 3
     def canchas_mas_utilizadas(self):
@@ -25,10 +27,12 @@ class ReportesService:
         pass
     
     # Formatear datos para reportes en PDF
-    def formatear_datos(self, datos, tipo_reporte=1):
+    def formatear_datos(self, datos, tipo_reporte):
         if tipo_reporte == 1:
             return [f"DNI: {fila[0]}, Nombre: {fila[1]} {fila[2]}, Total Reservas: {fila[3]}" for fila in datos]
-    
+        if tipo_reporte == 2:
+            return [f"Periodo: {fila[0]} - {fila[1]}, Total Reservas: {fila[2]}" for fila in datos]
+
     # Generacion de reportes en PDF
     def generar_reporte_pdf(self, datos, tipo_reporte):
         pdf = FPDF()
@@ -37,8 +41,17 @@ class ReportesService:
     
         if tipo_reporte == 1:
             pdf.cell(200, 10, txt="REPORTE RESERVAS POR CLIENTE", ln=True, align='C', border=1)
+        
+        if tipo_reporte == 2:
+            pdf.cell(200, 10, txt="REPORTE RESERVAS POR CANCHA EN PERIODO", ln=True, align='C', border=1)
             
         for item in datos:
             pdf.cell(200, 10, txt=str(item), ln=True)
+            
+        if tipo_reporte == 1:
+            pdf.output(f"reporte_reservas_por_cliente_{date.today()}.pdf")
+        
+        if tipo_reporte == 2:
+            pdf.output(f"reporte_reservas_por_cancha_en_periodo_{date.today()}.pdf")
 
-        pdf.output("reporte.pdf")
+       

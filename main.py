@@ -53,6 +53,7 @@ def main():
     
     # Reportes
     controlador.reservas_por_cliente()
+    controlador.reservas_por_cancha_en_periodo("2024-10-01", "2025-10-23")
     
     # ABMC Reserva
     

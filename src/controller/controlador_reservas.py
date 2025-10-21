@@ -62,8 +62,8 @@ class ControladorReservas:
     def reservas_por_cliente(self):
         return self.reportes_service.reservas_por_cliente()
     
-    def reservas_por_cancha_en_periodo(self):
-        pass
+    def reservas_por_cancha_en_periodo(self, fecha_inicio, fecha_fin):
+        return self.reportes_service.reservas_por_cancha_en_periodo(fecha_inicio, fecha_fin)
     
     def canchas_mas_utilizadas(self):
         pass
