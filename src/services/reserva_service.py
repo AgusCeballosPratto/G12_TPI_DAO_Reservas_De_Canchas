@@ -67,12 +67,11 @@ class ReservaService:
     def mostrar_reservas(self):
         reserva_dao = ReservaDAO()
         reservas = reserva_dao.listar()
-        for reserva in reservas:
-            print(reserva) # borrar despues
+        return reservas
     
     def mostrar_reserva_id(self, id_reserva):
         reserva_dao = ReservaDAO()
         reserva = reserva_dao.listar_id(id_reserva)
-        print(reserva) #borrar despues
+        return reserva
     
     
