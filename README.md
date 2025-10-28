@@ -30,10 +30,10 @@ Las funcionalidades que proponemos resolver son las que listamos en la siguiente
 | CU8  | **Registrar Torneo**                                       | Permitir crear torneos, asignando canchas y vincular reservas.                                             |
 | CU9  | **Registrar Pago**                                         | Registrar el pago de una reserva o torneo indicando monto, fecha y método.                                |
 | CU10 | **Registrar Servicio**                                     | Registrar el servicio asociado a una cancha en particular.                                                 |
-| CU1  | **Generar Reporte de Reservas por Cliente**                | Generar reporte con todas las reservas realizadas por un cliente, con fechas y estados.                   |
-| CU1  | **Generar Reporte de Reservas por Cancha y Período**      | Generar reporte de las reservas de una cancha dentro de un rango de fechas.                                |
-| CU1  | **Generar Reporte de Canchas más Utilizadas**             | Generar reporte que indica cuáles son las canchas con mayor cantidad de reservas.                         |
-| CU1  | **Generar Gráfico Estadístico de Utilización Mensual** | Generar gráficos (barras o tortas) con la ocupación mensual de las canchas.                              |
+| CU11 | **Generar Reporte de Reservas por Cliente**                | Generar reporte con todas las reservas realizadas por un cliente, con fechas y estados.                   |
+| CU12 | **Generar Reporte de Reservas por Cancha y Período**      | Generar reporte de las reservas de una cancha dentro de un rango de fechas.                                |
+| CU13 | **Generar Reporte de Canchas más Utilizadas**             | Generar reporte que indica cuáles son las canchas con mayor cantidad de reservas.                         |
+| CU14 | **Generar Gráfico Estadístico de Utilización Mensual** | Generar gráficos (barras o tortas) con la ocupación mensual de las canchas.                              |
 
 ---
 
