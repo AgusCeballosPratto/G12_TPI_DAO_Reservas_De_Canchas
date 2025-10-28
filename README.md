@@ -28,25 +28,26 @@ Las funcionalidades que proponemos resolver son las que listamos en la siguiente
 | CU6  | **Modificar Reserva**                                      | Permitir cambiar horario o anular una reserva existente.                                                   |
 | CU7  | **Consultar Disponibilidad**                               | Mostrar las canchas disponibles en una fecha y franja horaria.                                             |
 | CU8  | **Registrar Torneo**                                       | Permitir crear torneos, asignando canchas y vincular reservas.                                             |
-| CU9  | **Registrar Pago**                                         | Registrar el pago de una reserva o torneo, indicando monto, fecha y método.                               |
-| CU10 | **Generar Reporte de Reservas por Cliente**                | Generar reporte con todas las reservas realizadas por un cliente, con fechas y estados.                   |
-| CU11 | **Generar Reporte de Reservas por Cancha y Período**      | Generar reporte de las reservas de una cancha dentro de un rango de fechas.                                |
-| CU12 | **Generar Reporte de Canchas más Utilizadas**             | Generar reporte que indica cuáles son las canchas con mayor cantidad de reservas.                         |
-| CU13 | **Generar Gráfico Estadístico de Utilización Mensual** | Generar gráficos (barras o tortas) con la ocupación mensual de las canchas.                              |
+| CU9  | **Registrar Pago**                                         | Registrar el pago de una reserva o torneo indicando monto, fecha y método.                                |
+| CU10 | **Registrar Servicio**                                     | Registrar el servicio asociado a una cancha en particular.                                                 |
+| CU1  | **Generar Reporte de Reservas por Cliente**                | Generar reporte con todas las reservas realizadas por un cliente, con fechas y estados.                   |
+| CU1  | **Generar Reporte de Reservas por Cancha y Período**      | Generar reporte de las reservas de una cancha dentro de un rango de fechas.                                |
+| CU1  | **Generar Reporte de Canchas más Utilizadas**             | Generar reporte que indica cuáles son las canchas con mayor cantidad de reservas.                         |
+| CU1  | **Generar Gráfico Estadístico de Utilización Mensual** | Generar gráficos (barras o tortas) con la ocupación mensual de las canchas.                              |
 
 ---
 
 ## Diagrama de Entidades-Relación
 
 Para realizar el DER hemos utilizado la herramienta dbdiagram.io, el diagrama que hemos propuesto es el siguiente:
-![1760823936379](image/README/1760823936379.png)
+![1761688556738](image/README/1761688556738.png)
 
 ---
 
 ## Diagrama de Clases
 
 Hemos construido un diagrama de clases con la herramienta draw.io. El diagrama que propusimos es el siguiente:
-![1760823996611](image/README/1760823996611.png)
+![1761688567933](image/README/1761688567933.png)
 
 ---
 
