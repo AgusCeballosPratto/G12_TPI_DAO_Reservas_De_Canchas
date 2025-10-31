@@ -15,7 +15,8 @@ class PagoDAO(IBaseDAO):
         self.cursor = self.conn.cursor()
         
     def existe(self, id):
-        pass
+        self.cursor.execute("SELECT * FROM pagos WHERE id = ?", (id,))
+        return self.cursor.fetchone() is not None
     
     def alta(self, pago):
         self.cursor.execute("""
@@ -25,13 +26,21 @@ class PagoDAO(IBaseDAO):
         self.conn.commit()
     
     def listar(self):
-        pass
+        self.cursor.execute("SELECT * FROM pagos")
+        return self.cursor.fetchall()
     
     def listar_id(self, id):
-        pass
+        self.cursor.execute("SELECT * FROM pagos WHERE id = ?", (id,))
+        return self.cursor.fetchone()
+
     
-    def modificar(self, id, nuevo_nombre):
-        pass
-    
+    def modificar(self, id, fecha_pago, metodo_pago):
+        self.cursor.execute("""
+            UPDATE pagos
+            SET fecha_pago = ?, metodo_pago = ?, estado_id = 6
+            WHERE id = ?
+        """, (fecha_pago, metodo_pago, id))
+        self.conn.commit()
+        
     def borrar(self, id):
         pass

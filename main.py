@@ -5,6 +5,7 @@
 import sys
 import os
 
+
 # Configurar paths
 current_dir = os.path.dirname(__file__)
 src_dir = os.path.join(current_dir, 'src')
@@ -26,6 +27,7 @@ from models.reserva import Reserva
 from services.cliente_service import ClienteService
 from services.cancha_service import CanchaService
 from services.reserva_service import ReservaService
+from services.pago_service import PagoService
 
 # Import de controlador
 from controller.controlador_reservas import ControladorReservas
@@ -44,6 +46,7 @@ def main():
     cliente_service = ClienteService()
     reserva_service = ReservaService()
     cancha_service = CanchaService()
+    pago_service = PagoService()
     
     # Inicializacion de los modelos
     cliente_1 = Cliente("12345678", "MARIA", "Wendler", "juan@gmail.com", "12345678")
@@ -60,7 +63,7 @@ def main():
     # ABMC Reserva
 
     # Alta
-    reserva_service.crear_reserva(reserva_1)
+    #reserva_service.crear_reserva(reserva_1)
     #reserva_service.crear_reserva(reserva_2)
     #reserva_service.crear_reserva(reserva_1)
     
@@ -110,6 +113,15 @@ def main():
     #cliente_service.mostrar_clientes()
     # busqueda
     #cliente_service.mostrar_cliente_id("11")
+    
+    # ABCM Pago
+    # listado
+    #print(pago_service.mostrar_pagos())
+    # abonar pago
+    #pago_service.abonar_pago()
+    # busqueda
+    #print(pago_service.mostrar_pago_id(1))
+   
     
     
     
