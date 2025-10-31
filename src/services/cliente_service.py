@@ -49,13 +49,12 @@ class ClienteService:
     def mostrar_clientes(self):
         cliente_dao = ClienteDAO()
         clientes = cliente_dao.listar()
-        for cliente in clientes:
-            print(cliente) # borrar despues
+        return clientes
     
     def mostrar_cliente_id(self, id_cliente):
         cliente_dao = ClienteDAO()
         cliente = cliente_dao.listar_id(id_cliente)
-        print(cliente) #borrar despues
+        return cliente
     
     # Modificacion
     def modificar_cliente_id(self, id_cliente):
@@ -83,7 +82,9 @@ class ClienteService:
     def validar_telefono(self, telefono):
         if not telefono:
             raise ValueError("El teléfono no puede estar vacío.")
-        telefono_limpio = re.sub(r'[^\d]', '', telefono)
+        # Convertir a string si es necesario
+        telefono_str = str(telefono)
+        telefono_limpio = re.sub(r'[^\d]', '', telefono_str)
         if not (8 <= len(telefono_limpio) <= 15):
             raise ValueError("El teléfono debe tener entre 8 y 15 dígitos.")
         

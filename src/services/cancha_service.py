@@ -52,13 +52,12 @@ class CanchaService:
     def mostrar_canchas(self):
         cancha_dao = CanchaDAO()
         canchas = cancha_dao.listar()
-        for cancha in canchas:
-            print(cancha) # borrar despues
+        return canchas
     
     def mostrar_cancha_id(self, id_cancha):
         cancha_dao = CanchaDAO()
         cancha = cancha_dao.listar_id(id_cancha)
-        print(cancha) #borrar despues
+        return cancha
     
     # Validaciones generales
     def validar_nombre(self, nombre):
