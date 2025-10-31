@@ -73,5 +73,5 @@ class CanchaService:
     def validar_costo_por_hora(self, costo_por_hora):
         if costo_por_hora <= 0:
             raise ValueError("El costo por hora debe ser un número positivo.")
-        
+    
     

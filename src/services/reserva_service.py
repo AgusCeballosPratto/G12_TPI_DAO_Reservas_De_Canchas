@@ -1,7 +1,11 @@
 from dao.reserva_dao import ReservaDAO
 from dao.cliente_dao import ClienteDAO
 from dao.cancha_dao import CanchaDAO
+from dao.pago_dao import PagoDAO
 from datetime import date
+from dao.servicio_dao import ServicioDAO
+from models.pago import Pago
+from services.pago_service import PagoService
 
 class ReservaService:
     
@@ -10,6 +14,7 @@ class ReservaService:
         reserva_dao = ReservaDAO()
         cliente_dao = ClienteDAO()
         cancha_dao = CanchaDAO()
+        pago_service = PagoService()
         
         # Validaciones 
         
@@ -38,8 +43,21 @@ class ReservaService:
         if not reserva_disponible:
             raise ValueError("No hay disponibilidad para la creacion de la reserva.")
         
+        # Control de servicio de iluminacion con reflectores en cancha
+        self.validar_iluminacion_con_reflectores(cancha_dao.listar_id(reserva.cancha_id)[5], reserva.servicio_id)
+        
+        # Control de hora con servicio de iluminacion 
+        if reserva.hora_inicio >= "19:00" and reserva.servicio_id in [1, 3]:
+            raise ValueError("Para reservar en horario nocturno, debe seleccionar un servicio con iluminacion.")
+        
         # Creacion de la reserva
         reserva_dao.alta(reserva)
+        
+        # Creacion del pago asociado a la reserva
+        id_ultima_reserva = reserva_dao.cursor.lastrowid
+        reserva = reserva_dao.listar_id(id_ultima_reserva)
+        pago_service.crear_pago(reserva)
+        
         
     # Baja
     def eliminar_reserva_id(self, id_reserva):
@@ -60,8 +78,7 @@ class ReservaService:
             raise ValueError("La reserva con ese ID no existe.")
         
         reserva_dao.modificar(id_reserva)
-
-            
+  
      
     # Consulta (listado y busqueda)
     def mostrar_reservas(self):
@@ -74,4 +91,14 @@ class ReservaService:
         reserva = reserva_dao.listar_id(id_reserva)
         return reserva
     
+    # Validaciones generales
+    def validar_iluminacion_con_reflectores(self, tiene_iluminacion, servicio_id):
+        if not tiene_iluminacion and servicio_id == 2:
+            raise ValueError("No se puede tener el servicio de iluminacion si la cancha no cuenta con reflectores.")
+        if not tiene_iluminacion and servicio_id == 4:
+            raise ValueError("No se puede tener el servicio completo, ya que la cancha no cuenta con reflectores.")
+        
+    
+        
+   
     

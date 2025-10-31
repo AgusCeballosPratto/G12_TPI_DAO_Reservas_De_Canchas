@@ -22,9 +22,9 @@ class CanchaDAO(IBaseDAO):
     
     def alta(self, cancha):
         self.cursor.execute("""
-            INSERT INTO canchas (nombre, tipo, costo_por_hora, estado_id)
-            VALUES (?, ?, ?, ?)
-        """, (cancha.nombre, cancha.tipo, cancha.costo_por_hora, cancha.estado_id))
+            INSERT INTO canchas (nombre, tipo, costo_por_hora, estado_id, tiene_iluminacion)
+            VALUES (?, ?, ?, ?, ?)
+        """, (cancha.nombre, cancha.tipo, cancha.costo_por_hora, cancha.estado_id, cancha.tiene_iluminacion))
         self.conn.commit()
 
     def listar(self):

@@ -47,9 +47,9 @@ class ReservaDAO(IBaseDAO):
 
     def alta(self, reserva):
         self.cursor.execute("""
-            INSERT INTO reservas (cliente_id, cancha_id, estado_id, fecha, hora_inicio, hora_fin, tiene_iluminacion, tiene_arbitro)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-        """, (reserva.cliente_id, reserva.cancha_id, reserva.estado_id, reserva.fecha, reserva.hora_inicio, reserva.hora_fin, reserva.tiene_iluminacion, reserva.tiene_arbitro))
+            INSERT INTO reservas (cliente_id, cancha_id, estado_id, fecha, hora_inicio, hora_fin, servicio_id)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+        """, (reserva.cliente_id, reserva.cancha_id, reserva.estado_id, reserva.fecha, reserva.hora_inicio, reserva.hora_fin, reserva.servicio_id))
         self.conn.commit()
 
     def listar(self):

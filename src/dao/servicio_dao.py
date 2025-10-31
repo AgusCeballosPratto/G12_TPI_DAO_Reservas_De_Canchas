@@ -2,18 +2,17 @@ import sqlite3
 import sys
 import os
 from dao.base_dao import IBaseDAO
-from models.estado import Estado
+from models.servicio import Servicio
 
 # Configurar path para encontrar modelos
 src_dir = os.path.dirname(os.path.dirname(__file__))
 sys.path.insert(0, src_dir)
 
-
-class EstadoDAO(IBaseDAO):
+class ServicioDAO(IBaseDAO):
     def __init__(self, db_path="reservasdecanchas.db"):
         self.conn = sqlite3.connect(db_path)
         self.cursor = self.conn.cursor()
-        
+
     def existe(self, id):
         pass
     
@@ -22,9 +21,10 @@ class EstadoDAO(IBaseDAO):
     
     def listar(self):
         pass
-    
+
     def listar_id(self, id):
-        pass
+        self.cursor.execute("SELECT * FROM servicios WHERE id = ?", (id,))
+        return self.cursor.fetchone()
     
     def modificar(self, id, nuevo_nombre):
         pass

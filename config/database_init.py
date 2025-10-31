@@ -4,6 +4,15 @@ import sqlite3
 def crear_tablas(cursor):
     """Crear todas las tablas necesarias para el sistema"""
     
+    # Tabla servicios
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS servicios (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nombre TEXT NOT NULL,
+            costo REAL NOT NULL
+        )
+    """)
+    
     # Tabla estados
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS estados (
@@ -31,7 +40,9 @@ def crear_tablas(cursor):
             nombre TEXT NOT NULL,
             tipo TEXT,
             costo_por_hora REAL,
-            estado_id INTEGER NOT NULL
+            estado_id INTEGER NOT NULL,
+            tiene_iluminacion BOOLEAN DEFAULT 0,
+            FOREIGN KEY(estado_id) REFERENCES estados(id)
         )
     """)
     
@@ -45,15 +56,31 @@ def crear_tablas(cursor):
             hora_inicio TEXT NOT NULL,
             hora_fin TEXT NOT NULL,
             estado_id INTEGER NOT NULL,
-            tiene_iluminacion BOOLEAN DEFAULT 0,
-            tiene_arbitro BOOLEAN DEFAULT 0, 
+            servicio_id INTEGER NOT NULL,
             FOREIGN KEY(cliente_id) REFERENCES clientes(dni),
             FOREIGN KEY(cancha_id) REFERENCES canchas(id),
-            FOREIGN KEY(estado_id) REFERENCES estados(id)
+            FOREIGN KEY(estado_id) REFERENCES estados(id),
+            FOREIGN KEY(servicio_id) REFERENCES servicios(id)
+        )
+    """)
+    
+    # Tabla pagos
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS pagos (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            reserva_id INTEGER NOT NULL,
+            monto REAL NOT NULL,
+            fecha_pago TEXT DEFAULT 'Sin definir',
+            estado_id INTEGER NOT NULL,
+            cliente_id INTEGER NOT NULL,
+            metodo_pago TEXT DEFAULT 'Sin definir',
+            FOREIGN KEY(reserva_id) REFERENCES reservas(id),
+            FOREIGN KEY(estado_id) REFERENCES estados(id),
+            FOREIGN KEY(cliente_id) REFERENCES clientes(dni)    
         )
     """)
 
-# Inicializacion de datos para la tabla estados
+# Inicializacion de datos para la tabla estados y servicios
 def insertar_datos_iniciales(cursor, conn):
     try:
         cursor.execute("SELECT COUNT(*) FROM estados")
@@ -62,12 +89,27 @@ def insertar_datos_iniciales(cursor, conn):
                 ('Libre', '2'),        
                 ('Ocupada', '2'),      
                 ('Activa', '1'),       
-                ('Finalizada', '1')    
+                ('Finalizada', '1'),
+                ('Pendiente de pago', '3'),
+                ('Pagada', '3') 
             ]
             
             cursor.executemany("""
                 INSERT INTO estados (nombre, ambito) VALUES (?, ?)
             """, estados_iniciales)
+        
+        cursor.execute("SELECT COUNT(*) FROM servicios")
+        if cursor.fetchone()[0] == 0:
+            servicios_iniciales = [
+                ('Sin Servicio', 0.0),
+                ('Iluminacion', 1000.0),
+                ('Arbitro', 2000.0),
+                ('Completo', 2500.0)
+            ]
+            
+            cursor.executemany("""
+                INSERT INTO servicios (nombre, costo) VALUES (?, ?)
+            """, servicios_iniciales)
                 
         conn.commit()
         
