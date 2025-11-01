@@ -53,9 +53,9 @@ class SistemaReservasGUI:
         y = (self.root.winfo_screenheight() // 2) - (800 // 2)
         self.root.geometry(f"1200x800+{x}+{y}")
         
-        # Configurar el ícono (si existe)
+        # Configurar el ícono 
         try:
-            self.root.iconbitmap("assets/icon.ico")
+            self.root.iconbitmap("assets/icon/icon.ico")
         except:
             pass
     
@@ -138,11 +138,18 @@ class SistemaReservasGUI:
         main_frame = ttk.Frame(self.root)
         main_frame.pack(fill='both', expand=True, padx=10, pady=10)
         
+        # Marco para encabezado con título y logo
+        header_frame = ttk.Frame(main_frame)
+        header_frame.pack(fill='x', pady=(10, 20))
+        
         # Título principal
-        title_label = ttk.Label(main_frame, 
-                               text="SISTEMA DE GESTIÓN DE RESERVAS DE CANCHAS",
+        title_label = ttk.Label(header_frame, 
+                               text="   SISTEMA DE GESTION CANCHAS MADRID",
                                style='Title.TLabel')
-        title_label.pack(pady=(10, 20))
+        title_label.pack(side='left') 
+        
+        # Mostrar logo de la empresa en la esquina derecha
+        self.cargar_logo(header_frame)
         
         # Crear el notebook (sistema de pestañas)
         self.notebook = ttk.Notebook(main_frame)
@@ -153,6 +160,37 @@ class SistemaReservasGUI:
         
         # Barra de estado
         self.crear_barra_estado(main_frame)
+    
+    def cargar_logo(self, parent):
+        """Cargar y mostrar el logo de la empresa"""
+        try:
+            from PIL import Image, ImageTk
+            logo_path = os.path.join(current_dir, "assets", "logo", "logo_empresa.png")
+            
+            # Cargar y redimensionar la imagen
+            img = Image.open(logo_path)
+            img = img.resize((60, 60), Image.Resampling.LANCZOS)
+            self.logo_photo = ImageTk.PhotoImage(img)
+            
+            # Crear el label con la imagen
+            logo_label = tk.Label(parent, 
+                                image=self.logo_photo,
+                                bg=self.colores['fondo'])
+            logo_label.pack(side='right', padx=(10, 0))
+            
+        except Exception as e:
+            # Si no funciona PIL, intentar con PhotoImage básico
+            try:
+                self.logo_photo = tk.PhotoImage(file=os.path.join(current_dir, "assets", "logo", "logo_empresa.png"))
+                # Redimensionar con subsample
+                self.logo_photo = self.logo_photo.subsample(3, 3)
+                logo_label = tk.Label(parent, 
+                                    image=self.logo_photo,
+                                    bg=self.colores['fondo'])
+                logo_label.pack(side='right', padx=(10, 0))
+            except:
+                # Si todo falla, no mostrar logo
+                pass
     
     def crear_pestanas(self):
         """Crear todas las pestañas del sistema"""

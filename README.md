@@ -37,17 +37,25 @@ Las funcionalidades que proponemos resolver son las que listamos en la siguiente
 
 ---
 
+## Patron aplicado
+
+Hemos aplicado el patron DAO para gestionar las consultas CRUD separando la logica de negocio de la persistencia en la Base de Datos y una arquitectura monolitica de tipo MVC para la organizacion del codigo.
+
+
+![1761688556730](assets/imgs/mvc.jpg)
+
+
 ## Diagrama de Entidades-Relación
 
 Para realizar el DER hemos utilizado la herramienta dbdiagram.io, el diagrama que hemos propuesto es el siguiente:
-![1761688556738](image/README/1761688556738.png)
+![1761688556738](assets/imgs/G12_TPI_DAO_DER.png)
 
 ---
 
 ## Diagrama de Clases
 
 Hemos construido un diagrama de clases con la herramienta draw.io. El diagrama que propusimos es el siguiente:
-![1761688567933](image/README/1761688567933.png)
+![1761688567933](assets/imgs/G12_DAO_Reservas_Canchas-diagrama-terminado.png)
 
 ---
 

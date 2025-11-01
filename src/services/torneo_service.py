@@ -5,7 +5,7 @@ from dao.reserva_dao import ReservaDAO
 class TorneoService:
     
     # Alta 
-    def crear_torneo(self, torneo):
+    def crear_torneo(self, torneo, reservas_ids=None):
         torneo_dao = TorneoDAO()
         reserva_dao = ReservaDAO()
         
@@ -23,46 +23,39 @@ class TorneoService:
         if torneo.tipo not in ["Futbol", "Tenis", "Padel"]:
             raise ValueError("El tipo de torneo no es válido.")
         
-        # Busqueda de reservas con tipo de cancha igual al tipo de torneo
-        reservas_que_puedo_asociar_a_torneo = reserva_dao.listar_reserva_tipo_cancha(torneo.tipo)
-        print(reservas_que_puedo_asociar_a_torneo) # borrar despues (se mostraria en la interfaz)
-        reservas_por_asociar = []
-
-        while True: # Menu provisorio para validar backend, borrar despues 
-            print("1. Asociar una reserva al torneo")
-            print("2. Salir")
-            opcion = int(input("Seleccione una opción: "))
+        # Si se proporcionan reservas, calcular fechas de inicio y fin
+        if reservas_ids and len(reservas_ids) > 0:
+            # Obtener fechas de las reservas seleccionadas
+            fechas = set()
+            for reserva_id in reservas_ids:
+                reserva = reserva_dao.listar_id(reserva_id)
+                if reserva:
+                    fechas.add(reserva[3])  # reserva[3] es la fecha
             
-            if opcion == 1:
-                id_reserva_a_asociar = int(input("Ingrese el ID de la reserva a asociar: "))
-                reservas_por_asociar.append(id_reserva_a_asociar)
-                
-            elif opcion == 2:
-                break
-            
+            if fechas:
+                fechas_ordenadas = sorted(fechas)
+                torneo.fecha_inicio = fechas_ordenadas[0]
+                torneo.fecha_fin = fechas_ordenadas[-1]
             else:
-                print("Opción no válida. Intente de nuevo.")
-                
-        # Obtener menor fecha de inicio y mayor fecha de inicio entre las reservas asociadas
-        fechas = set()
-        for reserva_id in reservas_por_asociar:
-            reserva = reserva_dao.listar_id(reserva_id)
-            fechas.add(reserva[3])
-
-        fechas = sorted(fechas)
-        
-        torneo.fecha_inicio = fechas[0]
-        torneo.fecha_fin = fechas[-1]
+                torneo.fecha_inicio = "Sin definir"
+                torneo.fecha_fin = "Sin definir"
+        else:
+            # Si no hay reservas, usar fechas por defecto
+            torneo.fecha_inicio = "Sin definir"
+            torneo.fecha_fin = "Sin definir"
                  
         # Creacion del torneo
         torneo_dao.alta(torneo)
         
-        # Asignacion del torneo creado a las reservas
-        id_ultimo_torneo = torneo_dao.cursor.lastrowid
-        reservas_a_asociar = [list(reserva_dao.listar_id(reserva_id)) for reserva_id in reservas_por_asociar]
-        for reserva in reservas_a_asociar:
-            reserva[8] = id_ultimo_torneo
-            reserva_dao.adjuntar_torneo(reserva[0], id_ultimo_torneo)
+        # Obtener el ID del torneo recién creado
+        id_torneo = torneo_dao.cursor.lastrowid if hasattr(torneo_dao, 'cursor') else None
+        
+        # Si se proporcionaron reservas, asociarlas al torneo
+        if reservas_ids and id_torneo:
+            for reserva_id in reservas_ids:
+                reserva_dao.adjuntar_torneo(reserva_id, id_torneo)
+        
+        return id_torneo
     
     # Baja
     def eliminar_torneo_id(self, id_torneo):
@@ -87,3 +80,20 @@ class TorneoService:
         torneo_dao = TorneoDAO()
         torneo = torneo_dao.listar_nombre(nombre)
         return torneo
+    
+    def asociar_reserva_a_torneo(self, reserva_id, torneo_id):
+        reserva_dao = ReservaDAO()
+        
+        # Verificar que la reserva y el torneo existen
+        reserva = reserva_dao.listar_id(reserva_id)
+        if not reserva:
+            raise ValueError(f"No se encontró la reserva con ID {reserva_id}")
+        
+        torneo_dao = TorneoDAO()
+        if not torneo_dao.existe(torneo_id):
+            raise ValueError(f"No se encontró el torneo con ID {torneo_id}")
+        
+        # Asociar la reserva al torneo
+        reserva_dao.adjuntar_torneo(reserva_id, torneo_id)
+        
+        return True

@@ -117,6 +117,19 @@ class ReservaDAO(IBaseDAO):
         """, (torneo_id, reserva_id))
         conn.commit()
         conn.close()
+    
+    def listar_por_torneo(self, torneo_id):
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        cursor.execute("""
+            SELECT id, cliente_id, cancha_id, fecha, hora_inicio, hora_fin, estado_id, servicio_id, torneo_id
+            FROM reservas
+            WHERE torneo_id = ?
+            ORDER BY fecha, hora_inicio
+        """, (torneo_id,))
+        result = cursor.fetchall()
+        conn.close()
+        return result
 
     def borrar(self, id):
         conn = sqlite3.connect(self.db_path)

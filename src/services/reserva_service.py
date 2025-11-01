@@ -92,12 +92,28 @@ class ReservaService:
         reserva = reserva_dao.listar_id(id_reserva)
         return reserva
     
+    def mostrar_reservas_por_torneo(self, torneo_id):
+        reserva_dao = ReservaDAO()
+        reservas = reserva_dao.listar_por_torneo(torneo_id)
+        return reservas
+    
     # Validaciones generales
     def validar_iluminacion_con_reflectores(self, tiene_iluminacion, servicio_id):
         if not tiene_iluminacion and servicio_id == 2:
             raise ValueError("No se puede tener el servicio de iluminacion si la cancha no cuenta con reflectores.")
         if not tiene_iluminacion and servicio_id == 4:
             raise ValueError("No se puede tener el servicio completo, ya que la cancha no cuenta con reflectores.")
+    
+    def asociar_reserva_a_torneo(self, reserva_id, torneo_id):
+        reserva_dao = ReservaDAO()
+        
+        # Verificar que la reserva existe
+        reserva_existe = reserva_dao.existe(reserva_id)
+        if not reserva_existe:
+            raise ValueError("La reserva con ese ID no existe.")
+        
+        # Asociar la reserva al torneo
+        reserva_dao.adjuntar_torneo(reserva_id, torneo_id)
         
     
         

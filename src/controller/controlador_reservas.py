@@ -25,6 +25,9 @@ class ControladorReservas:
     def listar_reservas(self):
         return self.reserva_service.mostrar_reservas()
     
+    def listar_reservas_por_torneo(self, torneo_id):
+        return self.reserva_service.mostrar_reservas_por_torneo(torneo_id)
+    
     def finalizar_reserva(self, id_reserva):
         return self.reserva_service.finalizar_reserva_id(id_reserva)
     
@@ -96,8 +99,8 @@ class ControladorReservas:
         return self.pagos_service.calcular_monto_reserva(reserva)
     
     # Torneos
-    def crear_torneo(self, torneo):
-        return self.torneo_service.crear_torneo(torneo)
+    def crear_torneo(self, torneo, reservas_ids=None):
+        return self.torneo_service.crear_torneo(torneo, reservas_ids)
 
     def eliminar_torneo_id(self, id_torneo):
         return self.torneo_service.eliminar_torneo_id(id_torneo)
@@ -107,6 +110,9 @@ class ControladorReservas:
     
     def mostrar_torneos_nombre(self, nombre):
         return self.torneo_service.mostrar_torneo_nombre(nombre)
+    
+    def asociar_reserva_a_torneo(self, reserva_id, torneo_id):
+        return self.reserva_service.asociar_reserva_a_torneo(reserva_id, torneo_id)
     
     # Reportes
     def reservas_por_cliente(self):

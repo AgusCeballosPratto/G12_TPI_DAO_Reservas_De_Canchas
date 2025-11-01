@@ -56,8 +56,15 @@ class ReportesService:
     def generar_reporte_pdf(self, datos, tipo_reporte):
         pdf = FPDF()
         pdf.add_page()
+        
+        # Marca de agua
+        try:
+            pdf.image("assets/logo/logo_empresa.png", x=30, y=60, w=150, h=0)
+        except:
+            pass 
+            
         pdf.set_font("Arial", size=12)
-    
+        
         # Encabezados segun tipo de reporte
         if tipo_reporte == 1:
             pdf.cell(200, 10, txt="REPORTE RESERVAS POR CLIENTE", ln=True, align='C', border=1)
