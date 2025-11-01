@@ -61,8 +61,14 @@ class CanchaService:
     
     # Validaciones generales
     def validar_nombre(self, nombre):
+        cancha_dao = CanchaDAO()
+        
         if not nombre:
             raise ValueError("El nombre de la cancha no puede estar vacío.")
+        
+        cancha_existe = cancha_dao.existe_nombre(nombre)
+        if cancha_existe:
+            raise ValueError("Ya existe una cancha con ese nombre.")
         
     def validar_tipo(self, tipo):
         if not tipo:

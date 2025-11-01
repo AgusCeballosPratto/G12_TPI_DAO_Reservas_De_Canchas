@@ -59,6 +59,15 @@ class ReservaDAO(IBaseDAO):
     def listar_id(self, id):
         self.cursor.execute("SELECT * FROM reservas WHERE id = ?", (id,))
         return self.cursor.fetchone()
+    
+    def listar_reserva_tipo_cancha(self, tipo_cancha):
+        self.cursor.execute("""
+            SELECT r.*
+            FROM reservas r
+            JOIN canchas c ON r.cancha_id = c.id
+            WHERE c.tipo = ?
+        """, (tipo_cancha,))
+        return self.cursor.fetchall()
 
     def modificar(self, id):
         self.cursor.execute("""
@@ -66,6 +75,14 @@ class ReservaDAO(IBaseDAO):
             SET estado_id = 4
             WHERE id = ?
         """, (id,))
+        self.conn.commit()
+        
+    def adjuntar_torneo(self, reserva_id, torneo_id):
+        self.cursor.execute("""
+            UPDATE reservas
+            SET torneo_id = ?
+            WHERE id = ?
+        """, (torneo_id, reserva_id))
         self.conn.commit()
 
     def borrar(self, id):

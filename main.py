@@ -22,12 +22,14 @@ from config.database_config import init_database
 from models.cliente import Cliente
 from models.cancha import Cancha
 from models.reserva import Reserva
+from models.torneo import Torneo
 
 # Importaciones de los services 
 from services.cliente_service import ClienteService
 from services.cancha_service import CanchaService
 from services.reserva_service import ReservaService
 from services.pago_service import PagoService
+from services.torneo_service import TorneoService
 
 # Import de controlador
 from controller.controlador_reservas import ControladorReservas
@@ -47,12 +49,14 @@ def main():
     reserva_service = ReservaService()
     cancha_service = CanchaService()
     pago_service = PagoService()
+    torneo_service = TorneoService()
     
     # Inicializacion de los modelos
     cliente_1 = Cliente("12345678", "MARIA", "Wendler", "juan@gmail.com", "12345678")
-    cancha_1 = Cancha("Cancha Central", "Futbol", 5000, True)
-    reserva_1 = Reserva("12345678", 1, "2025-11-11", "14:00", "17:00", 2)
+    cancha_1 = Cancha("Cancha Norte", "Padel", 5000, True)
+    reserva_1 = Reserva("12345678", 1, "2025-11-14", "14:00", "17:00", 2)
     reserva_2 = Reserva("98765432", 1, "2025-12-24", "16:10", "17:00")
+    torneo_1 = Torneo("Torneo de Futbol", "Futbol")
     
     # Reportes
     #controlador.reservas_por_cliente()
@@ -121,6 +125,13 @@ def main():
     #pago_service.abonar_pago()
     # busqueda
     #print(pago_service.mostrar_pago_id(1))
+    
+    # ABMC Torneo
+    # Alta
+    #torneo_service.crear_torneo(torneo_1)
+    # Baja
+    torneo_service.eliminar_torneo_id(2)
+    # Consulta (listado y busqueda)
    
     
     

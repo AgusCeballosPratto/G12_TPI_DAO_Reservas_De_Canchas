@@ -57,10 +57,12 @@ def crear_tablas(cursor):
             hora_fin TEXT NOT NULL,
             estado_id INTEGER NOT NULL,
             servicio_id INTEGER NOT NULL,
+            torneo_id INTEGER,
             FOREIGN KEY(cliente_id) REFERENCES clientes(dni),
             FOREIGN KEY(cancha_id) REFERENCES canchas(id),
             FOREIGN KEY(estado_id) REFERENCES estados(id),
-            FOREIGN KEY(servicio_id) REFERENCES servicios(id)
+            FOREIGN KEY(servicio_id) REFERENCES servicios(id),
+            FOREIGN KEY(torneo_id) REFERENCES torneos(id)
         )
     """)
     
@@ -77,6 +79,17 @@ def crear_tablas(cursor):
             FOREIGN KEY(reserva_id) REFERENCES reservas(id),
             FOREIGN KEY(estado_id) REFERENCES estados(id),
             FOREIGN KEY(cliente_id) REFERENCES clientes(dni)    
+        )
+    """)
+    
+    # Tabla torneos
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS torneos (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nombre TEXT NOT NULL,
+            fecha_inicio TEXT,
+            fecha_fin TEXT,
+            tipo TEXT NOT NULL
         )
     """)
 

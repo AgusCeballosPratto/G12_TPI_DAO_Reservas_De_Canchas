@@ -18,6 +18,10 @@ class CanchaDAO(IBaseDAO):
     def existe(self, id):
         self.cursor.execute("SELECT * FROM canchas WHERE id = ?", (id,))
         return self.cursor.fetchone() is not None
+    
+    def existe_nombre(self, nombre):
+        self.cursor.execute("SELECT * FROM canchas WHERE nombre = ?", (nombre,))
+        return self.cursor.fetchone() is not None
 
     
     def alta(self, cancha):

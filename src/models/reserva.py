@@ -8,3 +8,4 @@ class Reserva:
         self.hora_fin = hora_fin
         self.estado_id = 3
         self.servicio_id = servicio_id
+        self.torneo_id = None
