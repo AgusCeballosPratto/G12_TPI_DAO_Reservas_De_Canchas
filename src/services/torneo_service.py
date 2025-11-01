@@ -74,3 +74,16 @@ class TorneoService:
         else: 
             raise ValueError("No se encontro el torneo.")  
         
+    # Consulta (listado y busqueda)
+    def mostrar_torneos(self):
+        torneo_dao = TorneoDAO()
+        torneos = torneo_dao.listar()
+        return torneos
+    
+    def mostrar_torneo_nombre(self, nombre):
+        if not nombre:
+            raise ValueError("El nombre no puede estar vacío.")
+        
+        torneo_dao = TorneoDAO()
+        torneo = torneo_dao.listar_nombre(nombre)
+        return torneo

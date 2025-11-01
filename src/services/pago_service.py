@@ -30,6 +30,21 @@ class PagoService:
         pago = pago_dao.listar_id(id)
         return pago
     
+    def mostrar_reservas_pagadas(self):
+        pago_dao = PagoDAO()
+        reservas_pagadas = pago_dao.listar_reservas_pagadas()
+        return reservas_pagadas
+    
+    def mostrar_reservas_pendientes_pago(self):
+        pago_dao = PagoDAO()
+        reservas_pendientes_pago = pago_dao.listar_reservas_pendientes_pago()
+        return reservas_pendientes_pago
+    
+    def mostrar_pago_de_metodo_pago(self, metodo_pago):
+        pago_dao = PagoDAO()
+        pagos_de_metodo_pago = pago_dao.listar_pago_de_metodo_pago(metodo_pago)
+        return pagos_de_metodo_pago
+    
     # Modificacion
     def abonar_pago(self):
         pago_dao = PagoDAO()

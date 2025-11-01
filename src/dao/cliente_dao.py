@@ -24,6 +24,7 @@ class ClienteDAO(IBaseDAO):
             VALUES (?, ?, ?, ?, ?)
         """, (cliente.dni, cliente.nombre, cliente.apellido, cliente.email, cliente.telefono))
         self.conn.commit()
+        self.conn.close()
 
     def listar(self):
         self.cursor.execute("SELECT * FROM clientes")
@@ -40,7 +41,9 @@ class ClienteDAO(IBaseDAO):
             WHERE dni = ?
         """, (nuevo_email, nuevo_telefono, id))
         self.conn.commit()
+        self.conn.close()
 
     def borrar(self, id):
         self.cursor.execute("DELETE FROM clientes WHERE dni = ?", (id,))
         self.conn.commit()
+        self.conn.close()

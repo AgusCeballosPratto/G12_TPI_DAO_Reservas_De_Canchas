@@ -31,6 +31,12 @@ class ReportesService:
         datos = self.reserva_dao.grafico_utilizacion_mensual_canchas()
         self.generar_imagen_utilizacion_mensual_canchas(datos)
         self.generar_reporte_pdf([], tipo_reporte=4)
+        
+    # tipo_reporte = 5
+    def facturacion_mensual(self):
+        datos = self.reserva_dao.facturacion_mensual()
+        datos_formateados = self.formatear_datos(datos, tipo_reporte=5)
+        self.generar_reporte_pdf(datos_formateados, tipo_reporte=5)
     
     # Formatear datos para reportes en PDF
     def formatear_datos(self, datos, tipo_reporte):
@@ -42,6 +48,9 @@ class ReportesService:
         
         if tipo_reporte == 3:
             return [f"Nombre Cancha: {fila[0]}, Total Reservas: {fila[1]}" for fila in datos]
+        
+        if tipo_reporte == 5:
+            return [f"Mes: {fila[0]}, Facturación Total: ${fila[1]:.2f}" for fila in datos]
 
     # Generacion de reportes en PDF
     def generar_reporte_pdf(self, datos, tipo_reporte):
@@ -61,6 +70,9 @@ class ReportesService:
         
         if tipo_reporte == 4:
             pdf.cell(200, 10, txt="UTILIZACION MENSUAL DE CANCHAS", ln=True, align='C', border=1)
+            
+        if tipo_reporte == 5:
+            pdf.cell(200, 10, txt="REPORTE FACTURACION MENSUAL", ln=True, align='C', border=1)
         
         # Contenido del reporte
         for item in datos:
@@ -80,6 +92,9 @@ class ReportesService:
             pdf.image("img_temporal.png", x=10, y=35, w=180)  
             pdf.output(f"reporte_grafico_utilizacion_mensual_canchas_{date.today()}.pdf")
             os.remove("img_temporal.png")
+            
+        if tipo_reporte == 5:
+            pdf.output(f"reporte_facturacion_mensual_{date.today()}.pdf")
 
     # Generacion de imagen para grafico de utilizacion mensual de canchas 
     def generar_imagen_utilizacion_mensual_canchas(self, datos):

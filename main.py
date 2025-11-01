@@ -63,6 +63,7 @@ def main():
     #controlador.reservas_por_cancha_en_periodo("2024-10-01", "2025-10-23")
     #controlador.canchas_mas_utilizadas()
     #controlador.grafico_utilizacion_mensual_canchas()
+    #controlador.facturacion_mensual()
     
     # ABMC Reserva
 
@@ -98,6 +99,8 @@ def main():
     # Consulta (listado y busqueda)
     #cancha_service.mostrar_canchas()
     #cancha_service.mostrar_cancha_id(2)
+    #cancha_service.mostrar_cancha_nombre("")
+    #cancha_service.mostrar_cancha_iluminacion()
     
     # ABMC Cliente
     
@@ -125,18 +128,20 @@ def main():
     #pago_service.abonar_pago()
     # busqueda
     #print(pago_service.mostrar_pago_id(1))
+    #pago_service.mostrar_reservas_pagadas()
+    #pago_service.mostrar_reservas_pendientes_pago()
+    #pago_service.mostrar_pago_de_metodo_pago("")
     
     # ABMC Torneo
     # Alta
     #torneo_service.crear_torneo(torneo_1)
     # Baja
-    torneo_service.eliminar_torneo_id(2)
+    #torneo_service.eliminar_torneo_id(2)
     # Consulta (listado y busqueda)
-   
-    
-    
-    
-    
+    # listado
+    #torneo_service.mostrar_torneos()
+    # busqueda
+    #torneo_service.mostrar_torneo_nombre()
     
     
 if __name__ == "__main__":

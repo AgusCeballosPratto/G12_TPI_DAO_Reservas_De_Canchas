@@ -51,6 +51,7 @@ class ReservaDAO(IBaseDAO):
             VALUES (?, ?, ?, ?, ?, ?, ?)
         """, (reserva.cliente_id, reserva.cancha_id, reserva.estado_id, reserva.fecha, reserva.hora_inicio, reserva.hora_fin, reserva.servicio_id))
         self.conn.commit()
+        self.conn.close()
 
     def listar(self):
         self.cursor.execute("SELECT * FROM reservas")
@@ -76,6 +77,7 @@ class ReservaDAO(IBaseDAO):
             WHERE id = ?
         """, (id,))
         self.conn.commit()
+        self.conn.close()
         
     def adjuntar_torneo(self, reserva_id, torneo_id):
         self.cursor.execute("""
@@ -84,10 +86,12 @@ class ReservaDAO(IBaseDAO):
             WHERE id = ?
         """, (torneo_id, reserva_id))
         self.conn.commit()
+        self.conn.close()
 
     def borrar(self, id):
         self.cursor.execute("DELETE FROM reservas WHERE id = ?", (id,))
         self.conn.commit()
+        self.conn.close()
     
     # Reportes 
     
@@ -128,6 +132,17 @@ class ReservaDAO(IBaseDAO):
         self.cursor.execute("""
             SELECT strftime('%Y-%m', r.fecha) as mes, COUNT(r.id) as total_reservas
             FROM reservas r
+            GROUP BY mes
+            ORDER BY mes
+        """)
+        return self.cursor.fetchall()
+    
+    # Facturacion mensual
+    def facturacion_mensual(self):
+        self.cursor.execute("""
+            SELECT strftime('%Y-%m', p.fecha_pago) as mes, SUM(p.monto) as total_facturacion
+            FROM pagos p
+            WHERE p.estado_id = 6
             GROUP BY mes
             ORDER BY mes
         """)

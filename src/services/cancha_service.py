@@ -59,6 +59,16 @@ class CanchaService:
         cancha = cancha_dao.listar_id(id_cancha)
         return cancha
     
+    def mostrar_cancha_nombre(self, nombre):
+        cancha_dao = CanchaDAO()
+        cancha = cancha_dao.listar_nombre(nombre)
+        return cancha
+    
+    def mostrar_cancha_iluminacion(self):
+        cancha_dao = CanchaDAO()
+        canchas_con_iluminacion = cancha_dao.listar_iluminacion()
+        return canchas_con_iluminacion
+    
     # Validaciones generales
     def validar_nombre(self, nombre):
         cancha_dao = CanchaDAO()

@@ -27,9 +27,15 @@ class TorneoDAO(IBaseDAO):
             VALUES (?, ?, ?, ?)
         """, (torneo.nombre, torneo.fecha_inicio, torneo.fecha_fin, torneo.tipo))
         self.conn.commit()
+        self.conn.close()
     
     def listar(self):
-        pass
+        self.cursor.execute("SELECT * FROM torneos")
+        return self.cursor.fetchall()
+    
+    def listar_nombre(self, nombre):
+        self.cursor.execute("SELECT * FROM torneos WHERE nombre = ?", (nombre,))
+        return self.cursor.fetchone()
     
     def listar_id(self, id):
         pass
@@ -42,3 +48,4 @@ class TorneoDAO(IBaseDAO):
         self.cursor.execute("DELETE FROM torneos WHERE id = ?", (id,))
         self.cursor.execute("DELETE FROM reservas WHERE torneo_id = ?", (id,))
         self.conn.commit()
+        self.conn.close()

@@ -30,6 +30,7 @@ class CanchaDAO(IBaseDAO):
             VALUES (?, ?, ?, ?, ?)
         """, (cancha.nombre, cancha.tipo, cancha.costo_por_hora, cancha.estado_id, cancha.tiene_iluminacion))
         self.conn.commit()
+        self.conn.close()
 
     def listar(self):
         self.cursor.execute("SELECT * FROM canchas")
@@ -38,6 +39,14 @@ class CanchaDAO(IBaseDAO):
     def listar_id(self, id):
         self.cursor.execute("SELECT * FROM canchas WHERE id = ?", (id,))
         return self.cursor.fetchone()
+    
+    def listar_nombre(self, nombre):
+        self.cursor.execute("SELECT * FROM canchas WHERE nombre = ?", (nombre,))
+        return self.cursor.fetchone()
+    
+    def listar_iluminacion(self):
+        self.cursor.execute("SELECT * FROM canchas WHERE tiene_iluminacion = 1")
+        return self.cursor.fetchall()
 
     def modificar(self, id, nuevo_nombre, nuevo_tipo, nuevo_costo):
         self.cursor.execute("""
@@ -46,7 +55,10 @@ class CanchaDAO(IBaseDAO):
             WHERE id = ?
         """, (nuevo_nombre, nuevo_tipo, nuevo_costo, id))
         self.conn.commit()
+        self.conn.close()
 
     def borrar(self, id):
         self.cursor.execute("DELETE FROM canchas WHERE id = ?", (id,))
         self.conn.commit()
+        self.conn.close()
+

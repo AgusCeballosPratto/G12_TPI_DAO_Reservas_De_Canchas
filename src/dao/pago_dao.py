@@ -24,6 +24,7 @@ class PagoDAO(IBaseDAO):
             VALUES (?, ?, ?, ?, ?, ?)
         """, (pago.reserva_id, pago.monto, pago.fecha_pago, pago.metodo_pago, pago.estado_id, pago.cliente_id))
         self.conn.commit()
+        self.conn.close()
     
     def listar(self):
         self.cursor.execute("SELECT * FROM pagos")
@@ -32,6 +33,32 @@ class PagoDAO(IBaseDAO):
     def listar_id(self, id):
         self.cursor.execute("SELECT * FROM pagos WHERE id = ?", (id,))
         return self.cursor.fetchone()
+    
+    def listar_reservas_pagadas(self):
+        self.cursor.execute("""
+            SELECT r.*
+            FROM reservas r
+            JOIN pagos p ON r.id = p.reserva_id
+            WHERE p.estado_id = 6
+        """)
+        return self.cursor.fetchall()
+    
+    def listar_reservas_pendientes_pago(self):
+        self.cursor.execute("""
+            SELECT r.*
+            FROM reservas r
+            JOIN pagos p ON r.id = p.reserva_id
+            WHERE p.estado_id = 5
+        """)
+        return self.cursor.fetchall()
+    
+    def listar_pago_de_metodo_pago(self, metodo_pago):
+        self.cursor.execute("""
+            SELECT *
+            FROM pagos
+            WHERE metodo_pago = ?
+        """, (metodo_pago,))
+        return self.cursor.fetchall()
 
     
     def modificar(self, id, fecha_pago, metodo_pago):
@@ -41,6 +68,7 @@ class PagoDAO(IBaseDAO):
             WHERE id = ?
         """, (fecha_pago, metodo_pago, id))
         self.conn.commit()
+        self.conn.close()
         
     def borrar(self, id):
         pass
