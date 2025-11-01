@@ -125,7 +125,7 @@ def main():
     # listado
     #print(pago_service.mostrar_pagos())
     # abonar pago
-    #pago_service.abonar_pago()
+    pago_service.abonar_pago()
     # busqueda
     #print(pago_service.mostrar_pago_id(1))
     #pago_service.mostrar_reservas_pagadas()

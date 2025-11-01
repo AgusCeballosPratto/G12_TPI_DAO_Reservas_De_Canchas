@@ -123,7 +123,7 @@ class CanchaGUI:
         list_frame.pack(fill='both', expand=True, padx=20, pady=10)
         
         # Crear Treeview
-        columns = ('id', 'nombre', 'tipo', 'costo', 'estado', 'iluminacion')
+        columns = ('id', 'nombre', 'tipo', 'costo', 'iluminacion')
         self.tree_canchas = ttk.Treeview(list_frame, columns=columns, show='headings', height=12)
         
         # Configurar columnas
@@ -131,7 +131,6 @@ class CanchaGUI:
         self.tree_canchas.heading('nombre', text='Nombre')
         self.tree_canchas.heading('tipo', text='Tipo')
         self.tree_canchas.heading('costo', text='Costo/Hora')
-        self.tree_canchas.heading('estado', text='Estado')
         self.tree_canchas.heading('iluminacion', text='Iluminación')
         
         # Ajustar ancho de columnas
@@ -139,7 +138,6 @@ class CanchaGUI:
         self.tree_canchas.column('nombre', width=150)
         self.tree_canchas.column('tipo', width=100)
         self.tree_canchas.column('costo', width=100)
-        self.tree_canchas.column('estado', width=100)
         self.tree_canchas.column('iluminacion', width=100)
         
         # Scrollbar para la tabla
@@ -214,7 +212,6 @@ class CanchaGUI:
             # Llenar tabla
             for cancha in canchas:
                 # cancha = (id, nombre, tipo, costo_por_hora, estado_id, tiene_iluminacion)
-                estado_texto = "Libre" if cancha[4] == 1 else "Ocupada"
                 iluminacion_texto = "Sí" if cancha[5] else "No"
                 
                 valores = (
@@ -222,7 +219,6 @@ class CanchaGUI:
                     cancha[1],  # nombre
                     cancha[2],  # tipo
                     f"${cancha[3]:.2f}",  # costo
-                    estado_texto,  # estado
                     iluminacion_texto  # iluminación
                 )
                 
