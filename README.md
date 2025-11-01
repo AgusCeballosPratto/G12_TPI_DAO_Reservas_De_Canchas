@@ -55,7 +55,7 @@ Para realizar el DER hemos utilizado la herramienta dbdiagram.io, el diagrama qu
 ## Diagrama de Clases
 
 Hemos construido un diagrama de clases con la herramienta draw.io. El diagrama que propusimos es el siguiente:
-![1761688567933](assets/imgs/G12_DAO_Reservas_Canchas-diagrama-terminado.png)
+![1761688567933](assets/imgs/G12_DAO_Reservas_Canchas-diagrama-terminado.jpg)
 
 ---
 
