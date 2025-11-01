@@ -20,12 +20,12 @@ from config.database_config import init_database
 from controller.controlador_reservas import ControladorReservas
 
 # Importar las pestañas/módulos de la GUI
-from cliente_gui import ClienteGUI
-from cancha_gui import CanchaGUI
-from reserva_gui import ReservaGUI
-from pago_gui import PagoGUI
-from torneo_gui import TorneoGUI
-from reportes_gui import ReportesGUI
+from gui.cliente_gui import ClienteGUI
+from gui.cancha_gui import CanchaGUI
+from gui.reserva_gui import ReservaGUI
+from gui.pago_gui import PagoGUI
+from gui.torneo_gui import TorneoGUI
+from gui.reportes_gui import ReportesGUI
 
 class SistemaReservasGUI:
     def __init__(self):

@@ -250,7 +250,7 @@ class PagoGUI:
         # Crear ventana para abonar pago
         self.ventana_abonar = tk.Toplevel(self.parent)
         self.ventana_abonar.title("Abonar Pago")
-        self.ventana_abonar.geometry("400x300")
+        self.ventana_abonar.geometry("400x400") 
         self.ventana_abonar.resizable(False, False)
         
         # Centrar ventana
@@ -290,25 +290,23 @@ class PagoGUI:
         button_frame.pack(fill='x')
         
         ttk.Button(button_frame,
-                  text="💳 Confirmar Pago",
+                  text="Confirmar Pago",
                   command=self.confirmar_pago,
                   style='Success.TButton').pack(side='left', padx=(0, 10))
         
         ttk.Button(button_frame,
-                  text="❌ Cancelar",
+                  text="Cancelar",
                   command=self.ventana_abonar.destroy).pack(side='left')
     
     def confirmar_pago(self):
         """Confirmar el pago con el método seleccionado"""
         try:
-            from gui_helpers import GUIHelpers
-            
             if not self.var_metodo_pago.get():
                 messagebox.showerror("Error", "Seleccione un método de pago")
                 return
             
-            # Usar el helper para abonar el pago
-            GUIHelpers.abonar_pago_gui(
+            # Usar el controlador para abonar el pago
+            self.controlador.abonar_pago(
                 int(self.pago_seleccionado[0]),  # ID del pago
                 self.var_metodo_pago.get()       # Método de pago
             )
@@ -319,9 +317,3 @@ class PagoGUI:
             
         except Exception as e:
             messagebox.showerror("Error", f"Error al abonar pago: {str(e)}")
-    
-    def abonar_pago_gui(self, id_pago, metodo_pago):
-        """Método adaptado para abonar pago desde la GUI (DEPRECATED - usar GUIHelpers)"""
-        # Este método se mantiene por compatibilidad pero se recomienda usar GUIHelpers
-        from gui_helpers import GUIHelpers
-        GUIHelpers.abonar_pago_gui(id_pago, metodo_pago)

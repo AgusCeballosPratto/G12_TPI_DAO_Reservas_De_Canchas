@@ -89,8 +89,8 @@ class ControladorReservas:
     def mostrar_pago_de_metodo(self, metodo_pago):
         return self.pagos_service.mostrar_pago_de_metodo_pago(metodo_pago)
     
-    def abonar_pago(self):
-        return self.pagos_service.abonar_pago()
+    def abonar_pago(self, id_pago, metodo_pago):
+        return self.pagos_service.abonar_pago(id_pago, metodo_pago)
     
     def calcular_monto_reserva(self, reserva):
         return self.pagos_service.calcular_monto_reserva(reserva)

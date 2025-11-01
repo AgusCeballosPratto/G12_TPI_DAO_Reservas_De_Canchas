@@ -11,64 +11,91 @@ sys.path.insert(0, src_dir)
 
 class PagoDAO(IBaseDAO):
     def __init__(self, db_path="reservasdecanchas.db"):
-        self.conn = sqlite3.connect(db_path)
-        self.cursor = self.conn.cursor()
+        self.db_path = db_path
         
     def existe(self, id):
-        self.cursor.execute("SELECT * FROM pagos WHERE id = ?", (id,))
-        return self.cursor.fetchone() is not None
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM pagos WHERE id = ?", (id,))
+        result = cursor.fetchone() is not None
+        conn.close()
+        return result
     
     def alta(self, pago):
-        self.cursor.execute("""
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        cursor.execute("""
             INSERT INTO pagos (reserva_id, monto, fecha_pago, metodo_pago, estado_id, cliente_id)
             VALUES (?, ?, ?, ?, ?, ?)
         """, (pago.reserva_id, pago.monto, pago.fecha_pago, pago.metodo_pago, pago.estado_id, pago.cliente_id))
-        self.conn.commit()
-        self.conn.close()
+        conn.commit()
+        conn.close()
     
     def listar(self):
-        self.cursor.execute("SELECT * FROM pagos")
-        return self.cursor.fetchall()
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM pagos")
+        result = cursor.fetchall()
+        conn.close()
+        return result
     
     def listar_id(self, id):
-        self.cursor.execute("SELECT * FROM pagos WHERE id = ?", (id,))
-        return self.cursor.fetchone()
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM pagos WHERE id = ?", (id,))
+        result = cursor.fetchone()
+        conn.close()
+        return result
     
     def listar_reservas_pagadas(self):
-        self.cursor.execute("""
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        cursor.execute("""
             SELECT r.*
             FROM reservas r
             JOIN pagos p ON r.id = p.reserva_id
             WHERE p.estado_id = 6
         """)
-        return self.cursor.fetchall()
+        result = cursor.fetchall()
+        conn.close()
+        return result
     
     def listar_reservas_pendientes_pago(self):
-        self.cursor.execute("""
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        cursor.execute("""
             SELECT r.*
             FROM reservas r
             JOIN pagos p ON r.id = p.reserva_id
             WHERE p.estado_id = 5
         """)
-        return self.cursor.fetchall()
+        result = cursor.fetchall()
+        conn.close()
+        return result
     
     def listar_pago_de_metodo_pago(self, metodo_pago):
-        self.cursor.execute("""
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        cursor.execute("""
             SELECT *
             FROM pagos
             WHERE metodo_pago = ?
         """, (metodo_pago,))
-        return self.cursor.fetchall()
+        result = cursor.fetchall()
+        conn.close()
+        return result
 
     
     def modificar(self, id, fecha_pago, metodo_pago):
-        self.cursor.execute("""
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        cursor.execute("""
             UPDATE pagos
             SET fecha_pago = ?, metodo_pago = ?, estado_id = 6
             WHERE id = ?
         """, (fecha_pago, metodo_pago, id))
-        self.conn.commit()
-        self.conn.close()
+        conn.commit()
+        conn.close()
         
     def borrar(self, id):
         pass

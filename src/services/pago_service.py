@@ -46,23 +46,20 @@ class PagoService:
         return pagos_de_metodo_pago
     
     # Modificacion
-    def abonar_pago(self):
+    def abonar_pago(self, id_pago, metodo_pago):
+        """Abonar un pago específico con un método de pago dado"""
         pago_dao = PagoDAO()
-        metodos_de_pago = ["Tarjeta de credito", "Tarjeta de debito", "Efectivo", "Transferencia"] # borrar despues (se seleccionaria desde la interfaz)
         
-        print(self.mostrar_pagos()) # borrar despues (se mostraria en la interfaz)
-        
-        id_pago_seleccionado = int(input("Seleccione el pago a abonar (ingrese el numero de id correspondiente): ")) # borrar despues (se seleccionaria desde la interfaz)
-        metodo_de_pago_seleccionado = int(input("Seleccione el metodo de pago (ingrese el numero correspondiente): ")) # borrar despues (se seleccionaria desde la interfaz)
-        
-        self.fecha_pago = date.today().strftime("%Y-%m-%d")
-        self.metodo_pago = metodos_de_pago[metodo_de_pago_seleccionado]
-        
-        pago_existe = pago_dao.existe(id_pago_seleccionado)
+        # Verificar que el pago existe
+        pago_existe = pago_dao.existe(id_pago)
         if not pago_existe:
             raise ValueError("El pago con ese ID no existe.")
         
-        pago_dao.modificar(id_pago_seleccionado, self.fecha_pago, self.metodo_pago)
+        # Obtener fecha actual
+        fecha_pago = date.today().strftime("%Y-%m-%d")
+        
+        # Modificar el pago
+        pago_dao.modificar(id_pago, fecha_pago, metodo_pago)
         
         
     # Validaciones generales

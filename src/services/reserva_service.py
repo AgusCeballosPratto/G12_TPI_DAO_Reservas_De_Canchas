@@ -51,12 +51,13 @@ class ReservaService:
             raise ValueError("Para reservar en horario nocturno, debe seleccionar un servicio con iluminacion.")
         
         # Creacion de la reserva
-        reserva_dao.alta(reserva)
+        id_nueva_reserva = reserva_dao.alta(reserva)
         
         # Creacion del pago asociado a la reserva
-        id_ultima_reserva = reserva_dao.cursor.lastrowid
-        reserva = reserva_dao.listar_id(id_ultima_reserva)
-        pago_service.crear_pago(reserva)
+        # Crear nueva instancia del DAO para obtener la reserva creada
+        reserva_dao_consulta = ReservaDAO()
+        reserva_creada = reserva_dao_consulta.listar_id(id_nueva_reserva)
+        pago_service.crear_pago(reserva_creada)
         
         
     # Baja
