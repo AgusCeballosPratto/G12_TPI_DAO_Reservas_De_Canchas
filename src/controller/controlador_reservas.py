@@ -75,38 +75,38 @@ class ControladorReservas:
     
     # Pagos
     def mostrar_pagos(self):
-        return self.pagos_service.mostrar_pagos(self)
+        return self.pagos_service.mostrar_pagos()
     
     def mostrar_pagos_id(self, id):
-        return self.pagos_service.mostrar_pago_id(self, id)
+        return self.pagos_service.mostrar_pago_id(id)
     
     def mostrar_reservas_pagadas(self):
-        return self.pagos_service.mostrar_reservas_pagadas(self)
+        return self.pagos_service.mostrar_reservas_pagadas()
     
     def mostrar_reservas_pendientes_pagos(self):
-        return self.pagos_service.mostrar_reservas_pendientes_pago(self)
+        return self.pagos_service.mostrar_reservas_pendientes_pago()
     
     def mostrar_pago_de_metodo(self, metodo_pago):
-        return self.pagos_service.mostrar_pago_de_metodo_pago(self, metodo_pago)
+        return self.pagos_service.mostrar_pago_de_metodo_pago(metodo_pago)
     
     def abonar_pago(self):
-        return self.pagos_service.abonar_pago(self)
+        return self.pagos_service.abonar_pago()
     
     def calcular_monto_reserva(self, reserva):
-        return self.pagos_service.calcular_monto_reserva(self, reserva)
+        return self.pagos_service.calcular_monto_reserva(reserva)
     
     # Torneos
     def crear_torneo(self, torneo):
-        return self.torneo_service.crear_torneo(self, torneo)
+        return self.torneo_service.crear_torneo(torneo)
 
     def eliminar_torneo_id(self, id_torneo):
-        return self.torneo_service.eliminar_torneo_id(self, id_torneo)
+        return self.torneo_service.eliminar_torneo_id(id_torneo)
     
     def mostrar_torneos(self):
-        return self.torneo_service.mostrar_torneos(self)
+        return self.torneo_service.mostrar_torneos()
     
     def mostrar_torneos_nombre(self, nombre):
-        return self.torneo_service.mostrar_torneo_nombre(self, nombre)
+        return self.torneo_service.mostrar_torneo_nombre(nombre)
     
     # Reportes
     def reservas_por_cliente(self):
