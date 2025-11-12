@@ -16,6 +16,7 @@ class ReservaService:
         cancha_dao = CanchaDAO()
         pago_service = PagoService()
         
+        
         # Validaciones 
         
         # Cliente
@@ -63,10 +64,15 @@ class ReservaService:
     # Baja
     def eliminar_reserva_id(self, id_reserva):
         reserva_dao = ReservaDAO()
+        pago_dao = PagoDAO()
         
         reserva_existe = reserva_dao.existe(id_reserva)
         if reserva_existe: 
-            reserva_dao.borrar(id_reserva)
+            fecha_pago = date.today().strftime("%Y-%m-%d")
+            pago_dao.actualizar_estado(id_reserva, fecha_pago)
+            
+            reserva_dao.borrar(id_reserva) 
+            
         else: 
             raise ValueError("No se encontro la reserva.")
     
@@ -79,8 +85,8 @@ class ReservaService:
             raise ValueError("La reserva con ese ID no existe.")
         
         reserva_dao.modificar(id_reserva)
+        
   
-     
     # Consulta (listado y busqueda)
     def mostrar_reservas(self):
         reserva_dao = ReservaDAO()

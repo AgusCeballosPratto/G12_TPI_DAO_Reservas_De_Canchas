@@ -145,7 +145,7 @@ class PagoGUI:
             pagos = self.controlador.mostrar_pagos()
             
             # Estados
-            estados = {5: "Pendiente", 6: "Pagado"}
+            estados = {5: "Pendiente", 6: "Pagado", 4: "Finalizada"}
             
             # Llenar tabla
             for pago in pagos:

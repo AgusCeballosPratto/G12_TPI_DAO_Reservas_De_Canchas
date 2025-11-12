@@ -97,5 +97,16 @@ class PagoDAO(IBaseDAO):
         conn.commit()
         conn.close()
         
+    def actualizar_estado(self, reserva_id, fecha_pago):
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        cursor.execute("""
+            UPDATE pagos
+            SET fecha_pago = ?, estado_id = 4
+            WHERE id = ?
+        """, (fecha_pago, reserva_id))
+        conn.commit()
+        conn.close()
+        
     def borrar(self, id):
         pass

@@ -160,7 +160,7 @@ class ReservaDAO(IBaseDAO):
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
         cursor.execute("""
-            SELECT ? as fecha_inicio, ? as fecha_fin, COUNT(*) as total_reservas
+            SELECT ? as fecha_inicio, ? as fecha_fin, cancha_id, COUNT(*) as total_reservas
             FROM reservas r
             WHERE r.fecha BETWEEN ? AND ?
             GROUP BY r.cancha_id

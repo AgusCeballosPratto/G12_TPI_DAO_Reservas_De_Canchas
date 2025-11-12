@@ -42,9 +42,9 @@ class ReportesService:
     def formatear_datos(self, datos, tipo_reporte):
         if tipo_reporte == 1:
             return [f"DNI: {fila[0]}, Nombre: {fila[1]} {fila[2]}, Total Reservas: {fila[3]}" for fila in datos]
-        
+       
         if tipo_reporte == 2:
-            return [f"Periodo: {fila[0]} - {fila[1]}, Total Reservas: {fila[2]}" for fila in datos]
+            return [f"Periodo: {fila[0]} - {fila[1]}, Total Reservas: {fila[3]}, Cancha ID: {fila[2]}" for fila in datos]
         
         if tipo_reporte == 3:
             return [f"Nombre Cancha: {fila[0]}, Total Reservas: {fila[1]}" for fila in datos]
