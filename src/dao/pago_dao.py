@@ -102,7 +102,7 @@ class PagoDAO(IBaseDAO):
         cursor = conn.cursor()
         cursor.execute("""
             UPDATE pagos
-            SET fecha_pago = ?, estado_id = 4
+            SET fecha_pago = ?, estado_id = 7
             WHERE id = ?
         """, (fecha_pago, reserva_id))
         conn.commit()

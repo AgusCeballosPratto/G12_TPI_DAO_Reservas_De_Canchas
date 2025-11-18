@@ -62,30 +62,65 @@ class ReservaService:
         
         
     # Baja
+    # def eliminar_reserva_id(self, id_reserva):
+    #     reserva_dao = ReservaDAO()
+    #     pago_dao = PagoDAO()
+        
+    #     reserva_existe = reserva_dao.existe(id_reserva)
+    #     if reserva_existe: 
+    #         fecha_pago = date.today().strftime("%Y-%m-%d")
+    #         pago_dao.actualizar_estado(id_reserva, fecha_pago)
+            
+    #         reserva_dao.borrar(id_reserva) 
+            
+    #     else: 
+    #         raise ValueError("No se encontro la reserva.")
+        
+    # Cancelar Reserva
     def eliminar_reserva_id(self, id_reserva):
         reserva_dao = ReservaDAO()
         pago_dao = PagoDAO()
         
         reserva_existe = reserva_dao.existe(id_reserva)
-        if reserva_existe: 
+        reserva_finalizada = self.esta_finalizada(id_reserva)
+        
+        if reserva_existe and not reserva_finalizada: 
             fecha_pago = date.today().strftime("%Y-%m-%d")
             pago_dao.actualizar_estado(id_reserva, fecha_pago)
             
-            reserva_dao.borrar(id_reserva) 
+            reserva_dao.cancelar(id_reserva) 
             
         else: 
             raise ValueError("No se encontro la reserva.")
+        
     
     # Modificacion
     def finalizar_reserva_id(self, id_reserva):
         reserva_dao = ReservaDAO()
-        
+        reserva_cancelada = self.esta_cancelada(id_reserva)
         reserva_existe = reserva_dao.existe(id_reserva)
-        if not reserva_existe:
-            raise ValueError("La reserva con ese ID no existe.")
+        # if not reserva_existe:
+        #     raise ValueError("La reserva con ese ID no existe.")
+
+        # if not reserva_cancelada:    
+        #     reserva_dao.modificar(id_reserva)
+
+        if reserva_existe and not reserva_cancelada: 
         
-        reserva_dao.modificar(id_reserva)
+            reserva_dao.modificar(id_reserva)
+          
+        else: 
+            raise ValueError("No se encontro la reserva.")
         
+    def esta_cancelada(self, id_reserva):
+        reserva_dao = ReservaDAO()
+        estado_id = reserva_dao.obtener_estado(id_reserva)
+        return estado_id == 8
+    
+    def esta_finalizada(self, id_reserva):
+        reserva_dao = ReservaDAO()
+        estado_id = reserva_dao.obtener_estado(id_reserva)
+        return estado_id == 4
   
     # Consulta (listado y busqueda)
     def mostrar_reservas(self):

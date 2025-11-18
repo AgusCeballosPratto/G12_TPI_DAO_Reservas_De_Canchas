@@ -104,7 +104,9 @@ def insertar_datos_iniciales(cursor, conn):
                 ('Activa', '1'),       
                 ('Finalizada', '1'),
                 ('Pendiente de pago', '3'),
-                ('Pagada', '3') 
+                ('Pagada', '3'), 
+                ('Cancelada', '3'),
+                ('Cancelada', '1'),
             ]
             
             cursor.executemany("""

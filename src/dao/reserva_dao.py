@@ -137,6 +137,27 @@ class ReservaDAO(IBaseDAO):
         cursor.execute("DELETE FROM reservas WHERE id = ?", (id,))
         conn.commit()
         conn.close()
+
+    def cancelar(self, id):
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        cursor.execute("""
+            UPDATE reservas
+            SET estado_id = 8
+            WHERE id = ?
+        """, (id,))
+        conn.commit()
+        conn.close()
+    
+    def obtener_estado(self, id_reserva):
+        """Devuelve el estado_id de la reserva"""
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        cursor.execute("SELECT estado_id FROM reservas WHERE id = ?", (id_reserva,))
+        row = cursor.fetchone()
+        conn.close()
+        return row[0] if row else None
+
     
     # Reportes 
     

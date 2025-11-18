@@ -145,7 +145,7 @@ class PagoGUI:
             pagos = self.controlador.mostrar_pagos()
             
             # Estados
-            estados = {5: "Pendiente", 6: "Pagado", 4: "Finalizada"}
+            estados = {5: "Pendiente", 6: "Pagado", 7: "Cancelado"}
             
             # Llenar tabla
             for pago in pagos:
@@ -245,6 +245,10 @@ class PagoGUI:
         
         if self.pago_seleccionado[5] == "Pagado":
             messagebox.showwarning("Advertencia", "Este pago ya está abonado")
+            return
+        
+        if self.pago_seleccionado[5] == "Cancelado":
+            messagebox.showwarning("Advertencia", "Este pago está cancelado y no se puede abonar")
             return
         
         # Crear ventana para abonar pago

@@ -215,7 +215,7 @@ class ReservaGUI:
         btn_finalizar.pack(side='left', padx=(0, 10))
         
         btn_eliminar = ttk.Button(actions_frame,
-                                 text="Eliminar",
+                                 text="Cancelar",
                                  command=self.eliminar_reserva,
                                  style='Error.TButton')
         btn_eliminar.pack(side='left')
@@ -314,7 +314,7 @@ class ReservaGUI:
             reservas = self.controlador.listar_reservas()
             
             # Estados
-            estados = {3: "Activa", 4: "Finalizada"}
+            estados = {3: "Activa", 4: "Finalizada", 8: "Cancelada"}
             
             # Llenar tabla
             for reserva in reservas:
@@ -356,10 +356,17 @@ class ReservaGUI:
             messagebox.showwarning("Advertencia", "La reserva ya está finalizada")
             return
         
+        if self.reserva_seleccionada[6] == "Cancelada":
+            messagebox.showwarning("Advertencia", "La reserva está cancelada y no se puede finalizar")
+            return
+
         # Confirmar finalización
+        
         respuesta = messagebox.askyesno(
             "Confirmar Finalización",
-            f"¿Está seguro de finalizar la reserva ID {self.reserva_seleccionada[0]}?"
+            f"¿Está seguro de finalizar la reserva?\n"
+            f"Cliente: {self.reserva_seleccionada[1]}, Cancha: {self.reserva_seleccionada[2]}\n"
+            f"Fecha: {self.reserva_seleccionada[3]} de {self.reserva_seleccionada[4]} a {self.reserva_seleccionada[5]}"
         )
         
         if respuesta:
@@ -376,13 +383,21 @@ class ReservaGUI:
     def eliminar_reserva(self):
         """Eliminar la reserva seleccionada"""
         if not hasattr(self, 'reserva_seleccionada'):
-            messagebox.showwarning("Advertencia", "Seleccione una reserva para eliminar")
+            messagebox.showwarning("Advertencia", "Seleccione una reserva para cancelar")
             return
         
+        if self.reserva_seleccionada[6] == "Cancelada":
+            messagebox.showwarning("Advertencia", "La reserva ya está cancelada")
+            return
+        
+        if self.reserva_seleccionada[6] == "Finalizada":
+            messagebox.showwarning("Advertencia", "La reserva está finalizada y no se puede cancelar")
+            return
+
         # Confirmar eliminación
         respuesta = messagebox.askyesno(
-            "Confirmar Eliminación",
-            f"¿Está seguro de eliminar la reserva ID {self.reserva_seleccionada[0]}?\n"
+            "Confirmar Cancelación",
+            f"¿Está seguro de cancelar la reserva?\n"
             f"Cliente: {self.reserva_seleccionada[1]}, Cancha: {self.reserva_seleccionada[2]}\n"
             f"Fecha: {self.reserva_seleccionada[3]} de {self.reserva_seleccionada[4]} a {self.reserva_seleccionada[5]}"
         )
@@ -392,12 +407,12 @@ class ReservaGUI:
                 id_reserva = self.reserva_seleccionada[0]
                 self.controlador.eliminar_reserva(id_reserva)
                 
-                messagebox.showinfo("Éxito", "Reserva eliminada exitosamente")
+                messagebox.showinfo("Éxito", "Reserva cancelada exitosamente")
                 self.cargar_reservas()
                 delattr(self, 'reserva_seleccionada')
                 
             except Exception as e:
-                messagebox.showerror("Error", f"Error al eliminar reserva: {str(e)}")
+                messagebox.showerror("Error", f"Error al cancelar reserva: {str(e)}")
     
     def actualizar_todo(self):
         """Actualizar todos los datos"""

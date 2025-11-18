@@ -123,18 +123,18 @@ class CanchaGUI:
         list_frame.pack(fill='both', expand=True, padx=20, pady=10)
         
         # Crear Treeview
-        columns = ('id', 'nombre', 'tipo', 'costo', 'iluminacion')
+        columns = ('nombre', 'tipo', 'costo', 'iluminacion')
         self.tree_canchas = ttk.Treeview(list_frame, columns=columns, show='headings', height=12)
         
         # Configurar columnas
-        self.tree_canchas.heading('id', text='ID')
+        # self.tree_canchas.heading('id', text='ID')
         self.tree_canchas.heading('nombre', text='Nombre')
         self.tree_canchas.heading('tipo', text='Tipo')
         self.tree_canchas.heading('costo', text='Costo/Hora')
         self.tree_canchas.heading('iluminacion', text='Iluminación')
         
         # Ajustar ancho de columnas
-        self.tree_canchas.column('id', width=50)
+        # self.tree_canchas.column('id', width=50)
         self.tree_canchas.column('nombre', width=150)
         self.tree_canchas.column('tipo', width=100)
         self.tree_canchas.column('costo', width=100)
@@ -215,14 +215,14 @@ class CanchaGUI:
                 iluminacion_texto = "Sí" if cancha[5] else "No"
                 
                 valores = (
-                    cancha[0],  # id
+                    # cancha[0],  # id
                     cancha[1],  # nombre
                     cancha[2],  # tipo
                     f"${cancha[3]:.2f}",  # costo
                     iluminacion_texto  # iluminación
                 )
                 
-                self.tree_canchas.insert('', 'end', values=valores)
+                self.tree_canchas.insert('', 'end', iid=str(cancha[0]), values=valores)
                 
         except Exception as e:
             messagebox.showerror("Error", f"Error al cargar canchas: {str(e)}")
@@ -231,9 +231,10 @@ class CanchaGUI:
         """Manejar selección de cancha en la tabla"""
         selection = self.tree_canchas.selection()
         if selection:
-            item = self.tree_canchas.item(selection[0])
+            iid = selection[0]
+            item = self.tree_canchas.item(iid)
             values = item['values']
-            self.cancha_seleccionada = values
+            self.cancha_seleccionada = (iid, values[0], values[1], values[2], values[3])
     
     def modificar_cancha(self):
         """Modificar la cancha seleccionada"""
@@ -262,8 +263,8 @@ class CanchaGUI:
         main_frame = ttk.Frame(self.ventana_modificar, padding=20)
         main_frame.pack(fill='both', expand=True)
         
-        # Mostrar ID (no editable)
-        ttk.Label(main_frame, text=f"ID: {self.cancha_seleccionada[0]}").pack(anchor='w', pady=5)
+        # # Mostrar ID (no editable)
+        # ttk.Label(main_frame, text=f"ID: {self.cancha_seleccionada[0]}").pack(anchor='w', pady=5)
         
         # Campos editables
         ttk.Label(main_frame, text="Nombre:").pack(anchor='w', pady=(10, 0))
@@ -329,8 +330,7 @@ class CanchaGUI:
         # Confirmar eliminación
         respuesta = messagebox.askyesno(
             "Confirmar Eliminación",
-            f"¿Está seguro de eliminar la cancha '{self.cancha_seleccionada[1]}'?\n"
-            f"ID: {self.cancha_seleccionada[0]}"
+            f"¿Está seguro de eliminar la cancha '{self.cancha_seleccionada[1]}'?"
         )
         
         if respuesta:
