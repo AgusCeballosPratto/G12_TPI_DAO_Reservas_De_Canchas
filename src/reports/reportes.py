@@ -87,21 +87,32 @@ class ReportesService:
         
         # Guardar el PDF con un nombre segun el tipo de reporte
         if tipo_reporte == 1:
-            pdf.output(f"reporte_reservas_por_cliente_{date.today()}.pdf")
+            ruta = f"reporte_reservas_por_cliente_{date.today()}.pdf"
+            pdf.output(ruta)
+            self.abrir_pdf(ruta)
+            
         
         if tipo_reporte == 2:
-            pdf.output(f"reporte_reservas_por_cancha_en_periodo_{date.today()}.pdf")
+            ruta = f"reporte_reservas_por_cancha_en_periodo_{date.today()}.pdf"
+            pdf.output(ruta)
+            self.abrir_pdf(ruta)
 
         if tipo_reporte == 3:
-            pdf.output(f"reporte_canchas_mas_utilizadas_{date.today()}.pdf")
+            ruta = f"reporte_canchas_mas_utilizadas_{date.today()}.pdf"
+            pdf.output(ruta)
+            self.abrir_pdf(ruta)
        
         if tipo_reporte == 4:
-            pdf.image("img_temporal.png", x=10, y=35, w=180)  
-            pdf.output(f"reporte_grafico_utilizacion_mensual_canchas_{date.today()}.pdf")
+            pdf.image("img_temporal.png", x=10, y=35, w=180)
+            ruta = f"reporte_grafico_utilizacion_mensual_canchas_{date.today()}.pdf"  
+            pdf.output(ruta)
             os.remove("img_temporal.png")
+            self.abrir_pdf(ruta)
             
         if tipo_reporte == 5:
-            pdf.output(f"reporte_facturacion_mensual_{date.today()}.pdf")
+            ruta = f"reporte_facturacion_mensual_{date.today()}.pdf"
+            pdf.output(ruta)
+            self.abrir_pdf(ruta)
 
     # Generacion de imagen para grafico de utilizacion mensual de canchas 
     def generar_imagen_utilizacion_mensual_canchas(self, datos):
@@ -121,4 +132,11 @@ class ReportesService:
         plt.savefig(ruta_imagen)
         plt.close()
         
+        # Abrir PDF automáticamente luego de generarlo (solo Windows)
+    def abrir_pdf(self, ruta_pdf):
+        try:
+            os.startfile(ruta_pdf)
+        except Exception as e:
+            print(f"No se pudo abrir el PDF automáticamente: {e}")
+
         
