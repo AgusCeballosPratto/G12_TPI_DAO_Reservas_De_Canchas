@@ -18,7 +18,7 @@ class GUIHelpers:
     """Métodos auxiliares para adaptar servicios a la GUI"""
     
     @staticmethod
-    def modificar_cliente_gui(dni, nuevo_email, nuevo_telefono):
+    def modificar_cliente_gui(dni, nuevo_nombre, nuevo_apellido, nuevo_email, nuevo_telefono):
         """Modificar cliente desde la GUI"""
         db_manager = DatabaseManager()
         cliente_service = ClienteService()
@@ -37,10 +37,10 @@ class GUIHelpers:
         # Modificar
         query_update = """
             UPDATE clientes 
-            SET email = ?, telefono = ? 
+            SET nombre = ?, apellido = ?, email = ?, telefono = ? 
             WHERE dni = ?
         """
-        db_manager.execute_query(query_update, (nuevo_email, nuevo_telefono, dni))
+        db_manager.execute_query(query_update, (nuevo_nombre, nuevo_apellido, nuevo_email, nuevo_telefono, dni))
     
     @staticmethod
     def modificar_cancha_gui(id_cancha, nuevo_nombre, nuevo_tipo, nuevo_costo):

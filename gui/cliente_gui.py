@@ -229,7 +229,7 @@ class ClienteGUI:
         # Crear ventana de modificación
         self.ventana_modificar = tk.Toplevel(self.parent)
         self.ventana_modificar.title("Modificar Cliente")
-        self.ventana_modificar.geometry("400x300")
+        self.ventana_modificar.geometry("400x400")
         self.ventana_modificar.resizable(False, False)
         
         # Centrar ventana
@@ -237,16 +237,23 @@ class ClienteGUI:
         self.ventana_modificar.grab_set()
         
         # Variables para modificación (solo email y teléfono)
+        self.var_mod_nombre = tk.StringVar(value=self.cliente_seleccionado[1])
+        self.var_mod_apellido = tk.StringVar(value=self.cliente_seleccionado[2])
         self.var_mod_email = tk.StringVar(value=self.cliente_seleccionado[3])
         self.var_mod_telefono = tk.StringVar(value=self.cliente_seleccionado[4])
-        
         # Frame principal
         main_frame = ttk.Frame(self.ventana_modificar, padding=20)
         main_frame.pack(fill='both', expand=True)
         
         # Mostrar DNI y nombre (no editables)
         ttk.Label(main_frame, text=f"DNI: {self.cliente_seleccionado[0]}").pack(anchor='w', pady=5)
-        ttk.Label(main_frame, text=f"Nombre: {self.cliente_seleccionado[1]} {self.cliente_seleccionado[2]}").pack(anchor='w', pady=5)
+        # ttk.Label(main_frame, text=f"Nombre: {self.cliente_seleccionado[1]} {self.cliente_seleccionado[2]}").pack(anchor='w', pady=5)
+        ttk.Label(main_frame, text="Nuevo Nombre:").pack(anchor='w', pady=(10, 0))
+        ttk.Entry(main_frame, textvariable=self.var_mod_nombre, width=40).pack(fill='x', pady=5)
+
+        ttk.Label(main_frame, text="Nuevo Apellido:").pack(anchor='w', pady=(10, 0))
+        ttk.Entry(main_frame, textvariable=self.var_mod_apellido, width=40).pack(fill='x', pady=5)
+        
         
         # Campos editables
         ttk.Label(main_frame, text="Nuevo Email:").pack(anchor='w', pady=(10, 0))
@@ -274,14 +281,16 @@ class ClienteGUI:
             from gui_helpers import GUIHelpers
             
             dni = self.cliente_seleccionado[0]
+            nuevo_nombre = self.var_mod_nombre.get().strip()
+            nuevo_apellido = self.var_mod_apellido.get().strip()
             nuevo_email = self.var_mod_email.get().strip()
             nuevo_telefono = self.var_mod_telefono.get().strip()
             
-            if not nuevo_email or not nuevo_telefono:
+            if not nuevo_email or not nuevo_telefono or not nuevo_nombre or not nuevo_apellido:
                 messagebox.showerror("Error", "Email y teléfono son obligatorios")
                 return
             
-            GUIHelpers.modificar_cliente_gui(dni, nuevo_email, nuevo_telefono)
+            GUIHelpers.modificar_cliente_gui(dni, nuevo_nombre, nuevo_apellido, nuevo_email, nuevo_telefono)
             
             messagebox.showinfo("Éxito", "Cliente modificado exitosamente")
             self.ventana_modificar.destroy()
