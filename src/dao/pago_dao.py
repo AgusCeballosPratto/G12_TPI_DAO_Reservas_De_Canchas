@@ -12,7 +12,22 @@ sys.path.insert(0, src_dir)
 class PagoDAO(IBaseDAO):
     def __init__(self, db_path="reservasdecanchas.db"):
         self.db_path = db_path
+
+    # Nuevo: 
+    def pago_esta_pagado(self, reserva_id):
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        cursor.execute("""
+            SELECT COUNT(*)
+            FROM pagos
+            WHERE reserva_id = ?
+            AND estado_id = 6
+        """, (reserva_id,))
         
+        result = cursor.fetchone()[0]
+        conn.close()
+        return result > 0
+    
     def existe(self, id):
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()

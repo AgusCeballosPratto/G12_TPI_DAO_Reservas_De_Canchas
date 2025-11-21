@@ -97,20 +97,21 @@ class ReservaService:
     # Modificacion
     def finalizar_reserva_id(self, id_reserva):
         reserva_dao = ReservaDAO()
+        #nuevo: linea
+        pago_service = PagoService()
+
         reserva_cancelada = self.esta_cancelada(id_reserva)
         reserva_existe = reserva_dao.existe(id_reserva)
-        # if not reserva_existe:
-        #     raise ValueError("La reserva con ese ID no existe.")
+        if not reserva_existe:
+            raise ValueError("La reserva no existe.")
 
-        # if not reserva_cancelada:    
-        #     reserva_dao.modificar(id_reserva)
-
-        if reserva_existe and not reserva_cancelada: 
+        if self.esta_cancelada(id_reserva):
+            raise ValueError("No se puede finalizar una reserva cancelada.")
         
-            reserva_dao.modificar(id_reserva)
-          
-        else: 
-            raise ValueError("No se encontro la reserva.")
+        if not pago_service.esta_pagado(id_reserva):
+            raise ValueError("No se puede finalizar la reserva porque no fue pagada.")
+
+        reserva_dao.modificar(id_reserva)
         
     def esta_cancelada(self, id_reserva):
         reserva_dao = ReservaDAO()

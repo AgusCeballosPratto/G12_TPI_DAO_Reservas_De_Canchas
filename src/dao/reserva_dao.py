@@ -158,7 +158,7 @@ class ReservaDAO(IBaseDAO):
         conn.close()
         return row[0] if row else None
 
-    
+
     # Reportes 
     
     # Reserva por cliente 

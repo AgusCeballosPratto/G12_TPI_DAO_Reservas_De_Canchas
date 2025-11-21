@@ -177,7 +177,7 @@ class ReservaGUI:
         self.tree_reservas = ttk.Treeview(list_frame, columns=columns, show='headings', height=12)
         
         # Configurar columnas
-        self.tree_reservas.heading('id', text='ID')
+        self.tree_reservas.heading('id', text='Nro Reserva')
         self.tree_reservas.heading('cliente', text='Cliente (DNI)')
         self.tree_reservas.heading('cancha', text='Cancha (ID)')
         self.tree_reservas.heading('fecha', text='Fecha')
@@ -251,6 +251,11 @@ class ReservaGUI:
                 self.canchas_data[texto] = cancha[0]  # Guardar ID
             
             self.combo_cancha['values'] = cancha_valores
+            # Nuevo: diccionario para vincular el id de la cancha con su texto"
+            self.canchas_por_id = {
+                cancha[0]: f"{cancha[1]} ({cancha[2]})"
+                for cancha in canchas
+            }
             
         except Exception as e:
             messagebox.showerror("Error", f"Error al cargar datos: {str(e)}")
@@ -321,11 +326,14 @@ class ReservaGUI:
                 # reserva = (id, cliente_id, cancha_id, fecha, hora_inicio, hora_fin, estado_id, servicio_id, torneo_id)
                 estado_texto = estados.get(reserva[6], "Desconocido")
                 servicio_texto = self.servicios.get(reserva[7], "Desconocido")
-                
+                # nuevo: para no usar el id de la cancha drectamente
+                cancha_texto = self.canchas_por_id.get(reserva[2], reserva[2])
+
                 valores = (
                     reserva[0],  # id
                     reserva[1],  # cliente_id
-                    reserva[2],  # cancha_id
+                    # reserva[2],  # cancha_id
+                    cancha_texto,
                     reserva[3],  # fecha
                     reserva[4],  # hora_inicio
                     reserva[5],  # hora_fin

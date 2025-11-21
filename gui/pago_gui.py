@@ -96,7 +96,7 @@ class PagoGUI:
         self.tree_pagos = ttk.Treeview(list_frame, columns=columns, show='headings', height=12)
         
         # Configurar columnas
-        self.tree_pagos.heading('id', text='ID')
+        self.tree_pagos.heading('id', text='Nro pago')
         self.tree_pagos.heading('reserva_id', text='Reserva ID')
         self.tree_pagos.heading('monto', text='Monto')
         self.tree_pagos.heading('fecha_pago', text='Fecha Pago')

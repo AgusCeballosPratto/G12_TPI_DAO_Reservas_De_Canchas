@@ -1,7 +1,7 @@
 # Dependencias del Sistema de Reservas de Canchas
 
 # Dependencias básicas para el funcionamiento
-fpdf2>=3.0.0
+fpdf2>=2.8.5
 matplotlib>=3.5.0
 
 # Dependencia para widgets de calendario en la GUI

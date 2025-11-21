@@ -45,6 +45,11 @@ class PagoService:
         pagos_de_metodo_pago = pago_dao.listar_pago_de_metodo_pago(metodo_pago)
         return pagos_de_metodo_pago
     
+    #nuevo: 
+    def esta_pagado(self, reserva_id):
+        pago_dao = PagoDAO()
+        return pago_dao.pago_esta_pagado(reserva_id)
+
     # Modificacion
     def abonar_pago(self, id_pago, metodo_pago):
         """Abonar un pago específico con un método de pago dado"""
