@@ -16,9 +16,9 @@ class ReportesService:
 
     # tipo_reporte = 2
     def reservas_por_cancha_en_periodo(self, fecha_inicio, fecha_fin):
-        datos = self.reserva_dao.reservas_por_cancha_en_periodo(fecha_inicio, fecha_fin)
-        datos_formateados = self.formatear_datos(datos, tipo_reporte=2)
-        self.generar_reporte_pdf(datos_formateados, tipo_reporte=2)
+        datos = self.reserva_dao.reservas_por_cancha_en_periodo(fecha_inicio, fecha_fin)    
+        #datos_formateados = self.formatear_datos(datos, tipo_reporte=2)
+        self.generar_reporte_pdf(datos, tipo_reporte=2)
 
     # tipo_reporte = 3
     def canchas_mas_utilizadas(self):
@@ -44,7 +44,8 @@ class ReportesService:
             return [f"DNI: {fila[0]}, Nombre: {fila[1]} {fila[2]}, Total Reservas: {fila[3]}" for fila in datos]
        
         if tipo_reporte == 2:
-            return [f"Periodo: {fila[0]} - {fila[1]}, Total Reservas: {fila[3]}, Cancha ID: {fila[2]}" for fila in datos]
+            return datos
+            # return [f"Periodo: {fila[0]} - {fila[1]}, Total Reservas: {fila[3]}, Cancha: {fila[2]}" for fila in datos]
         
         if tipo_reporte == 3:
             return [f"Nombre Cancha: {fila[0]}, Total Reservas: {fila[1]}" for fila in datos]
@@ -68,10 +69,10 @@ class ReportesService:
         # Encabezados segun tipo de reporte
         if tipo_reporte == 1:
             pdf.cell(200, 10, txt="REPORTE RESERVAS POR CLIENTE", ln=True, align='C', border=1)
-        
+            
         if tipo_reporte == 2:
             pdf.cell(200, 10, txt="REPORTE RESERVAS POR CANCHA EN PERIODO", ln=True, align='C', border=1)
-        
+            
         if tipo_reporte == 3:
             pdf.cell(200, 10, txt="REPORTE CANCHAS MAS UTILIZADAS", ln=True, align='C', border=1)
         
@@ -82,8 +83,10 @@ class ReportesService:
             pdf.cell(200, 10, txt="REPORTE FACTURACION MENSUAL", ln=True, align='C', border=1)
         
         # Contenido del reporte
-        for item in datos:
-            pdf.cell(200, 10, txt=str(item), ln=True)
+        if tipo_reporte in [1, 3, 4, 5]:
+            for item in datos:
+                pdf.cell(200, 10, txt=str(item), ln=True)
+        
         
         # Guardar el PDF con un nombre segun el tipo de reporte
         if tipo_reporte == 1:
@@ -92,10 +95,41 @@ class ReportesService:
             self.abrir_pdf(ruta)
             
         
+        # if tipo_reporte == 2:
+        #     ruta = f"reporte_reservas_por_cancha_en_periodo_{date.today()}.pdf"
+        #     pdf.output(ruta)
+        #     self.abrir_pdf(ruta)
+        #nuevo nuevo
         if tipo_reporte == 2:
+
+            for fila in datos:
+                fecha_inicio = fila[0]
+                fecha_fin = fila[1]
+                nombre_cancha = fila[2]
+                total = fila[3]
+
+                pdf.ln(5)
+                pdf.set_font("Arial", "B", 12)
+                pdf.cell(200, 8, txt=f"CANCHA: {nombre_cancha}", ln=True)
+
+                pdf.set_font("Arial", size=11)
+                pdf.multi_cell(
+                    200,
+                    7,
+                    txt=(
+                        f"Período: {fecha_inicio} al {fecha_fin}\n"
+                        f"Total de reservas: {total}"
+                    ),
+                )
+
+                pdf.ln(3)
+                pdf.set_draw_color(0, 0, 0)
+                pdf.line(10, pdf.get_y(), 200, pdf.get_y())
+
             ruta = f"reporte_reservas_por_cancha_en_periodo_{date.today()}.pdf"
             pdf.output(ruta)
             self.abrir_pdf(ruta)
+
 
         if tipo_reporte == 3:
             ruta = f"reporte_canchas_mas_utilizadas_{date.today()}.pdf"

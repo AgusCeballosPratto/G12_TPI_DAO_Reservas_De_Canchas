@@ -185,7 +185,7 @@ class ReservaGUI:
         # Configurar columnas
         self.tree_reservas.heading('id', text='Nro Reserva')
         self.tree_reservas.heading('cliente', text='Cliente (DNI)')
-        self.tree_reservas.heading('cancha', text='Cancha (ID)')
+        self.tree_reservas.heading('cancha', text='Cancha')
         self.tree_reservas.heading('fecha', text='Fecha')
         self.tree_reservas.heading('hora_inicio', text='Hora Inicio')
         self.tree_reservas.heading('hora_fin', text='Hora Fin')
