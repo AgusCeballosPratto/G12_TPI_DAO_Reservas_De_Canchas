@@ -36,9 +36,16 @@ class ReportesService:
 
     # tipo_reporte = 3
     def canchas_mas_utilizadas(self):
-        datos = self.reserva_dao.canchas_mas_utilizadas()
-        datos_formateados = self.formatear_datos(datos, tipo_reporte=3)
-        self.generar_reporte_pdf(datos_formateados, tipo_reporte=3)
+        resumen = self.reserva_dao.canchas_mas_utilizadas()
+
+        # Obtener detalle por cada cancha
+        detalles = {}
+        for fila in resumen:
+            cancha = fila[0]    # nombre cancha
+            detalles[cancha] = self.reserva_dao.reservas_detalle_por_cancha(cancha)
+
+        self.generar_reporte_pdf((resumen, detalles), tipo_reporte=3)
+
 
     # tipo_reporte = 4
     def grafico_utilizacion_mensual_canchas(self):
@@ -98,7 +105,7 @@ class ReportesService:
             pdf.cell(200, 10, txt="REPORTE FACTURACION MENSUAL", ln=True, align='C', border=1)
         
         # Contenido del reporte
-        if tipo_reporte in [ 3, 4]:
+        if tipo_reporte in [ 4]:
             for item in datos:
                 pdf.cell(200, 10, txt=str(item), ln=True)
         
@@ -209,9 +216,75 @@ class ReportesService:
 
 
         if tipo_reporte == 3:
+            resumen, detalles = datos
+
+            pdf.set_font("Arial", "B", 14)
+            pdf.ln(5)
+            pdf.cell(200, 8, txt="REPORTE CANCHAS MAS UTILIZADAS", ln=True, align="C")
+            pdf.ln(5)
+
+            # -------------------------
+            # RESUMEN GENERAL
+            # -------------------------
+            pdf.set_font("Arial", "B", 12)
+            pdf.cell(200, 8, txt="RESUMEN", ln=True)
+            pdf.set_font("Arial", size=11)
+
+            for fila in resumen:
+                cancha, total = fila
+                pdf.cell(200, 7, txt=f"{cancha}: {total} reservas", ln=True)
+
+            pdf.ln(8)
+
+            # -------------------------
+            # DETALLE POR CANCHA
+            # -------------------------
+            for cancha, lista in detalles.items():
+
+                pdf.set_font("Arial", "B", 12)
+                pdf.cell(200, 8, txt=f"DETALLE - {cancha}", ln=True)
+                pdf.cell(200, 8, txt=f"Deporte: {lista[0][4]}", ln=True)
+
+                pdf.ln(3)
+
+                # Encabezados de tabla:
+                pdf.set_font("Arial", "B", 10)
+                pdf.set_fill_color(200, 200, 200)
+                pdf.cell(30, 8, "Fecha", border=1, fill=True)
+                pdf.cell(20, 8, "Inicio", border=1, fill=True)
+                pdf.cell(20, 8, "Fin", border=1, fill=True)
+                pdf.cell(40, 8, "Cliente", border=1, fill=True)
+                pdf.cell(30, 8, "Servicio", border=1, fill=True)
+                pdf.cell(30, 8, "Estado", border=1, fill=True)
+                pdf.ln()
+
+                pdf.set_font("Arial", size=10)
+
+                for fila in lista:
+                    fecha, hi, hf, cliente, deporte, estado, servicio, monto = fila
+
+                    pdf.cell(30, 7, fecha, border=1)
+                    pdf.cell(20, 7, hi, border=1)
+                    pdf.cell(20, 7, hf, border=1)
+                    pdf.cell(40, 7, cliente, border=1)
+                    pdf.cell(30, 7, servicio, border=1)
+                    pdf.cell(30, 7, estado, border=1)
+                    pdf.ln()
+
+                # Línea separadora
+                pdf.ln(5)
+                pdf.set_draw_color(0, 0, 0)
+                pdf.line(10, pdf.get_y(), 200, pdf.get_y())
+                pdf.ln(5)
+
+                # Salto de página automático
+                if pdf.get_y() > 250:
+                    pdf.add_page()
+
             ruta = f"reporte_canchas_mas_utilizadas_{date.today()}.pdf"
             pdf.output(ruta)
             self.abrir_pdf(ruta)
+
        
         if tipo_reporte == 4:
             pdf.image("img_temporal.png", x=10, y=35, w=180)

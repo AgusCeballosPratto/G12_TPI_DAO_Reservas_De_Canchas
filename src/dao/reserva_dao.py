@@ -244,21 +244,6 @@ class ReservaDAO(IBaseDAO):
         conn.close()
         return result
     
-    # Reporte de canchas mas utilizadas
-    def canchas_mas_utilizadas(self):
-        conn = sqlite3.connect(self.db_path)
-        cursor = conn.cursor()
-        cursor.execute("""
-            SELECT c.nombre, COUNT(r.id) as total_reservas
-            FROM reservas r
-            JOIN canchas c ON r.cancha_id = c.id
-            GROUP BY c.id, c.nombre
-            ORDER BY total_reservas DESC
-        """)
-        result = cursor.fetchall()
-        conn.close()
-        return result
-    
     #nuevo
     def reservas_detalle_por_cancha_en_periodo(self, fecha_inicio, fecha_fin):
         """Devuelve el detalle de reservas dentro del periodo por cancha.
@@ -285,6 +270,60 @@ class ReservaDAO(IBaseDAO):
         conn.close()
         return result
     
+    # Reporte de canchas mas utilizadas
+    def canchas_mas_utilizadas(self):
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        cursor.execute("""
+            SELECT c.nombre, COUNT(r.id) as total_reservas
+            FROM reservas r
+            JOIN canchas c ON r.cancha_id = c.id
+            GROUP BY c.id, c.nombre
+            ORDER BY total_reservas DESC
+        """)
+        result = cursor.fetchall()
+        conn.close()
+        return result
+    
+    #nuevo 
+    def reservas_detalle_por_cancha(self, cancha_nombre):
+        """
+        Devuelve el detalle completo de reservas de una cancha.
+
+        Cada fila:
+        (fecha, hora_inicio, hora_fin, cliente, deporte, estado, monto)
+        """
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+
+        cursor.execute("""
+                SELECT
+                    r.fecha,
+                    r.hora_inicio,
+                    r.hora_fin,
+                    cli.nombre || ' ' || cli.apellido AS cliente,
+                    can.tipo AS deporte,
+                    CASE r.estado_id
+                        WHEN 3 THEN 'Activa'
+                        WHEN 4 THEN 'Finalizada'
+                        WHEN 8 THEN 'Cancelada'
+                        ELSE 'Desconocido'
+                    END AS estado,
+                    srv.nombre AS servicio,
+                    COALESCE(p.monto, 0) AS monto
+                FROM reservas r
+                JOIN clientes cli ON r.cliente_id = cli.dni
+                JOIN canchas can ON r.cancha_id = can.id
+                LEFT JOIN pagos p ON r.id = p.reserva_id
+                LEFT JOIN servicios srv ON r.servicio_id = srv.id
+                WHERE can.nombre = ?
+                ORDER BY r.fecha, r.hora_inicio
+            """, (cancha_nombre,))
+
+        result = cursor.fetchall()
+        conn.close()
+        return result
+
     # Datos para reporte grafico utilizacion mensual de canchas
     def grafico_utilizacion_mensual_canchas(self):
         conn = sqlite3.connect(self.db_path)
