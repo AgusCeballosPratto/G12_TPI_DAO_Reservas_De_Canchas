@@ -112,7 +112,12 @@ class ReservaService:
             raise ValueError("No se puede finalizar la reserva porque no fue pagada.")
 
         reserva_dao.modificar(id_reserva)
-        
+
+    #nuevo 
+    def obtener_horarios_ocupados(self, cancha_id, fecha):
+        reserva_dao = ReservaDAO()
+        return reserva_dao.horarios_ocupados(cancha_id, fecha)
+  
     def esta_cancelada(self, id_reserva):
         reserva_dao = ReservaDAO()
         estado_id = reserva_dao.obtener_estado(id_reserva)

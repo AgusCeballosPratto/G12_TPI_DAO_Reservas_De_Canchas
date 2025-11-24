@@ -37,6 +37,9 @@ class ControladorReservas:
     def modificar_reserva(self, id_reserva):
         return self.reserva_service.finalizar_reserva_id(id_reserva)
     
+    def obtener_horarios_ocupados(self, cancha_id, fecha):
+        return self.reserva_service.obtener_horarios_ocupados(cancha_id, fecha)
+
     # Métodos para Canchas
     def crear_cancha(self, cancha):
         return self.cancha_service.crear_cancha(cancha)

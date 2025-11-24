@@ -158,6 +158,22 @@ class ReservaDAO(IBaseDAO):
         conn.close()
         return row[0] if row else None
 
+    #nuevo 
+    def horarios_ocupados(self, cancha_id, fecha):
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        cursor.execute("""
+            SELECT hora_inicio, hora_fin
+            FROM reservas
+            WHERE cancha_id = ?
+            AND fecha = ?
+            AND estado_id != 8   -- excluye canceladas
+            AND estado_id != 4   -- excluye finalizadas
+        """, (cancha_id, fecha))
+        
+        result = cursor.fetchall()
+        conn.close()
+        return result
 
     # Reportes 
     

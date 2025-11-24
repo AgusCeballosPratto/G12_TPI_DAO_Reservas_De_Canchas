@@ -351,3 +351,5 @@ class CanchaGUI:
         self.var_tipo.set("")
         self.var_costo.set(0.0)
         self.var_iluminacion.set(False)
+
+    

@@ -102,7 +102,8 @@ class ReservaGUI:
                                         state="readonly",
                                         width=22)
         self.combo_cancha.grid(row=0, column=3, sticky='ew', padx=(0, 20), pady=5)
-        
+    
+
         # Fila 2: Fecha y Servicio
         ttk.Label(form_frame, text="Fecha:").grid(row=1, column=0, sticky='w', padx=(0, 10), pady=5)
         self.date_entry = DateEntry(form_frame, 
@@ -137,6 +138,11 @@ class ReservaGUI:
                                           state="readonly",
                                           width=22)
         self.combo_hora_fin.grid(row=2, column=3, sticky='ew', padx=(0, 20), pady=5)
+        
+
+        #nuevo nuevo 
+        self.combo_cancha.bind("<<ComboboxSelected>>", self.actualizar_horarios_disponibles)
+        self.date_entry.bind("<<DateEntrySelected>>", self.actualizar_horarios_disponibles)
         
         # Configurar el grid
         for i in range(4):
@@ -435,3 +441,43 @@ class ReservaGUI:
         self.var_hora_inicio.set("")
         self.var_hora_fin.set("")
         self.var_servicio.set("Sin Servicio")
+        
+    #nuevo nuevo 
+    def actualizar_horarios_disponibles(self, event=None):
+        try:
+            fecha = self.var_fecha.get()
+            cancha_texto = self.var_cancha.get()
+
+            if not fecha or not cancha_texto:
+                return
+
+            cancha_id = self.canchas_data[cancha_texto]
+
+            # Obtener horarios ocupados desde el controlador
+            ocupados = self.controlador.obtener_horarios_ocupados(cancha_id, fecha)
+
+            # Generar todos los horarios posibles
+            todos = self.generar_horas()
+            disponibles = []
+
+            for h in todos:
+                hora_dt = datetime.strptime(h, "%H:%M").time()
+
+                ocupado = False
+                for hi, hf in ocupados:
+                    hi_dt = datetime.strptime(hi, "%H:%M").time()
+                    hf_dt = datetime.strptime(hf, "%H:%M").time()
+
+                    if hi_dt <= hora_dt < hf_dt:
+                        ocupado = True
+                        break
+
+                if not ocupado:
+                    disponibles.append(h)
+
+            # Cargar solo horarios disponibles
+            self.combo_hora_inicio["values"] = disponibles
+            self.combo_hora_fin["values"] = disponibles
+
+        except Exception as e:
+            messagebox.showerror("Error", f"No se pudieron cargar los horarios disponibles: {e}")
