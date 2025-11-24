@@ -16,9 +16,21 @@ class ReportesService:
 
     # tipo_reporte = 2
     def reservas_por_cancha_en_periodo(self, fecha_inicio, fecha_fin):
-        datos = self.reserva_dao.reservas_por_cancha_en_periodo(fecha_inicio, fecha_fin)    
-        #datos_formateados = self.formatear_datos(datos, tipo_reporte=2)
-        self.generar_reporte_pdf(datos, tipo_reporte=2)
+        # Obtener detalle de reservas (cancha, fecha, hora_inicio, hora_fin, monto)
+        detalles = self.reserva_dao.reservas_detalle_por_cancha_en_periodo(fecha_inicio, fecha_fin)
+
+        # Agrupar por cancha
+        datos_por_cancha = {}
+        for fila in detalles:
+            cancha = fila[0]
+            fecha = fila[1]
+            hora_inicio = fila[2]
+            hora_fin = fila[3]
+            monto = fila[4]
+            datos_por_cancha.setdefault(cancha, []).append((fecha, hora_inicio, hora_fin, monto))
+
+        # Generar PDF con detalle en forma de tabla por cancha
+        self.generar_reporte_pdf_detalle_por_cancha(datos_por_cancha, fecha_inicio, fecha_fin)
 
     # tipo_reporte = 3
     def canchas_mas_utilizadas(self):
@@ -34,9 +46,10 @@ class ReportesService:
         
     # tipo_reporte = 5
     def facturacion_mensual(self):
-        datos = self.reserva_dao.facturacion_mensual()
-        datos_formateados = self.formatear_datos(datos, tipo_reporte=5)
-        self.generar_reporte_pdf(datos_formateados, tipo_reporte=5)
+        resumen = self.reserva_dao.facturacion_mensual()
+        detalle = self.reserva_dao.detalle_facturacion_mensual()
+        #datos_formateados = self.formatear_datos(datos, tipo_reporte=5)
+        self.generar_reporte_pdf((resumen, detalle), tipo_reporte=5)
     
     # Formatear datos para reportes en PDF
     def formatear_datos(self, datos, tipo_reporte):
@@ -76,14 +89,14 @@ class ReportesService:
         if tipo_reporte == 3:
             pdf.cell(200, 10, txt="REPORTE CANCHAS MAS UTILIZADAS", ln=True, align='C', border=1)
         
-        if tipo_reporte == 4:
+        if tipo_reporte == 4:   
             pdf.cell(200, 10, txt="UTILIZACION MENSUAL DE CANCHAS", ln=True, align='C', border=1)
             
         if tipo_reporte == 5:
             pdf.cell(200, 10, txt="REPORTE FACTURACION MENSUAL", ln=True, align='C', border=1)
         
         # Contenido del reporte
-        if tipo_reporte in [1, 3, 4, 5]:
+        if tipo_reporte in [1, 3, 4]:
             for item in datos:
                 pdf.cell(200, 10, txt=str(item), ln=True)
         
@@ -94,14 +107,9 @@ class ReportesService:
             pdf.output(ruta)
             self.abrir_pdf(ruta)
             
-        
-        # if tipo_reporte == 2:
-        #     ruta = f"reporte_reservas_por_cancha_en_periodo_{date.today()}.pdf"
-        #     pdf.output(ruta)
-        #     self.abrir_pdf(ruta)
+
         #nuevo nuevo
         if tipo_reporte == 2:
-
             for fila in datos:
                 fecha_inicio = fila[0]
                 fecha_fin = fila[1]
@@ -144,9 +152,126 @@ class ReportesService:
             self.abrir_pdf(ruta)
             
         if tipo_reporte == 5:
+            resumen, detalle = datos
+
+            # --------------------------
+            # 1) RESUMEN MENSUAL
+            # --------------------------
+            pdf.set_font("Arial", "B", 13)
+            pdf.ln(5)
+            pdf.cell(200, 8, txt="RESUMEN MENSUAL", ln=True)
+
+            pdf.set_font("Arial", size=11)
+            for fila in resumen:
+                mes = fila[0]
+                total = fila[1]
+                pdf.cell(200, 7, txt=f"Mes: {mes}  -  Total: ${total:.2f}", ln=True)
+
+
+            # --------------------------
+            # 2) DETALLE — TABLA
+            # --------------------------
+            pdf.ln(10)
+            pdf.set_font("Arial", "B", 13)
+            pdf.cell(200, 8, txt="DETALLE DE PAGOS", ln=True)
+            pdf.ln(3)
+
+            # Encabezados de tabla
+            pdf.set_font("Arial", "B", 10)
+            pdf.set_fill_color(200, 200, 200)
+
+            pdf.cell(20, 8, "Mes", border=1, align="C", fill=True)
+            pdf.cell(25, 8, "Monto", border=1, align="C", fill=True)
+            pdf.cell(30, 8, "Fecha Pago", border=1, align="C", fill=True)
+            pdf.cell(40, 8, "Reserva", border=1, align="C", fill=True)
+            pdf.cell(45, 8, "Cancha", border=1, align="C", fill=True)
+            pdf.cell(30, 8, "Deporte", border=1, align="C", fill=True)
+            pdf.ln()
+
+            # Filas de tabla
+            pdf.set_font("Arial", size=10)
+
+            for fila in detalle:
+                mes, monto, fecha_pago, fecha_reserva, hora_inicio, cancha, deporte = fila
+
+                pdf.cell(20, 7, mes, border=1)
+                pdf.cell(25, 7, f"${monto:.2f}", border=1)
+                pdf.cell(30, 7, fecha_pago, border=1)
+                pdf.cell(40, 7, f"{fecha_reserva}, {hora_inicio}", border=1)
+                pdf.cell(45, 7, cancha, border=1)
+                pdf.cell(30, 7, deporte, border=1)
+                pdf.ln()
+
             ruta = f"reporte_facturacion_mensual_{date.today()}.pdf"
             pdf.output(ruta)
             self.abrir_pdf(ruta)
+
+
+    def generar_reporte_pdf_detalle_por_cancha(self, datos_por_cancha, fecha_inicio, fecha_fin):
+        """Genera un PDF con detalle de reservas por cancha en forma de tabla.
+
+        `datos_por_cancha` es un dict: {cancha_nombre: [(fecha,h_inicio,h_fin,monto), ...], ...}
+        """
+        pdf = FPDF()
+        pdf.add_page()
+
+        try:
+            pdf.image("assets/logo/logo_empresa.png", x=30, y=60, w=150, h=0)
+        except:
+            pass
+
+        pdf.set_font("Arial", size=12)
+        pdf.cell(200, 10, txt="REPORTE RESERVAS POR CANCHA EN PERIODO - DETALLE", ln=True, align='C', border=1)
+        pdf.ln(4)
+
+        # Para cada cancha, dibujar un cuadro con encabezado y tabla
+        for cancha, filas in datos_por_cancha.items():
+            pdf.set_font("Arial", "B", 12)
+            pdf.cell(200, 8, txt=f"CANCHA: {cancha}", ln=True)
+            pdf.set_font("Arial", size=11)
+            pdf.cell(200, 7, txt=f"Período: {fecha_inicio} al {fecha_fin}", ln=True)
+            pdf.ln(2)
+
+            # Encabezado de tabla
+            pdf.set_font("Arial", "B", 11)
+            w_fecha = 50
+            w_hi = 45
+            w_hf = 45
+            w_monto = 40
+            pdf.cell(w_fecha, 8, txt="Fecha", border=1, align='C')
+            pdf.cell(w_hi, 8, txt="Hora inicio", border=1, align='C')
+            pdf.cell(w_hf, 8, txt="Hora fin", border=1, align='C')
+            pdf.cell(w_monto, 8, txt="Monto", border=1, align='C', ln=True)
+
+            pdf.set_font("Arial", size=11)
+            # Filas
+            for fila in filas:
+                fecha, hi, hf, monto = fila
+                pdf.cell(w_fecha, 7, txt=str(fecha), border=1)
+                pdf.cell(w_hi, 7, txt=str(hi), border=1)
+                pdf.cell(w_hf, 7, txt=str(hf), border=1)
+                pdf.cell(w_monto, 7, txt=f"${monto:.2f}", border=1, ln=True)
+
+            # Total reservas para la cancha
+            total = len(filas)
+            pdf.ln(2)
+            pdf.set_font("Arial", "B", 11)
+            pdf.cell(200, 7, txt=f"Total reservas: {total}", ln=True)
+            pdf.ln(4)
+
+            # Línea separadora
+            pdf.set_draw_color(0, 0, 0)
+            y = pdf.get_y()
+            pdf.line(10, y, 200, y)
+            pdf.ln(4)
+
+            # Nueva página si estamos muy al final
+            if pdf.get_y() > 250:
+                pdf.add_page()
+
+        ruta = f"reporte_reservas_por_cancha_en_periodo_detalle_{date.today()}.pdf"
+        pdf.output(ruta)
+        self.abrir_pdf(ruta)
 
     # Generacion de imagen para grafico de utilizacion mensual de canchas 
     def generar_imagen_utilizacion_mensual_canchas(self, datos):

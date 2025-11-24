@@ -227,6 +227,32 @@ class ReservaDAO(IBaseDAO):
         conn.close()
         return result
     
+    #nuevo
+    def reservas_detalle_por_cancha_en_periodo(self, fecha_inicio, fecha_fin):
+        """Devuelve el detalle de reservas dentro del periodo por cancha.
+
+        Cada fila: (cancha_nombre, fecha, hora_inicio, hora_fin, monto)
+        Si no existe pago asociado, monto será 0.
+        """
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        cursor.execute("""
+            SELECT
+                c.nombre as cancha_nombre,
+                r.fecha,
+                r.hora_inicio,
+                r.hora_fin,
+                COALESCE(p.monto, 0) as monto
+            FROM reservas r
+            JOIN canchas c ON r.cancha_id = c.id
+            LEFT JOIN pagos p ON r.id = p.reserva_id
+            WHERE r.fecha BETWEEN ? AND ?
+            ORDER BY c.nombre, r.fecha, r.hora_inicio
+        """, (fecha_inicio, fecha_fin))
+        result = cursor.fetchall()
+        conn.close()
+        return result
+    
     # Datos para reporte grafico utilizacion mensual de canchas
     def grafico_utilizacion_mensual_canchas(self):
         conn = sqlite3.connect(self.db_path)
@@ -252,6 +278,30 @@ class ReservaDAO(IBaseDAO):
             GROUP BY mes
             ORDER BY mes
         """)
+        result = cursor.fetchall()
+        conn.close()
+        return result
+    #nuevo
+    def detalle_facturacion_mensual(self):
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+
+        cursor.execute("""
+            SELECT 
+                strftime('%Y-%m', p.fecha_pago) AS mes,
+                p.monto,
+                p.fecha_pago AS fecha_pago,
+                r.fecha AS fecha_reserva,
+                r.hora_inicio,
+                c.nombre AS cancha_nombre,
+                c.tipo AS deporte
+            FROM pagos p
+            JOIN reservas r ON p.reserva_id = r.id
+            JOIN canchas c ON r.cancha_id = c.id
+            WHERE p.estado_id = 6
+            ORDER BY mes, fecha_reserva, hora_inicio
+        """)
+
         result = cursor.fetchall()
         conn.close()
         return result
