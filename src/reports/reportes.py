@@ -10,9 +10,11 @@ class ReportesService:
 
     # tipo_reporte = 1
     def reservas_por_cliente(self):
-        datos = self.reserva_dao.reservas_por_cliente()
-        datos_formateados = self.formatear_datos(datos, tipo_reporte=1)
-        self.generar_reporte_pdf(datos_formateados, tipo_reporte=1)
+        resumen = self.reserva_dao.reservas_por_cliente()
+        detalles = self.reserva_dao.detalle_reservas_por_cliente()
+
+        self.generar_reporte_pdf((resumen, detalles), tipo_reporte=1)
+
 
     # tipo_reporte = 2
     def reservas_por_cancha_en_periodo(self, fecha_inicio, fecha_fin):
@@ -96,13 +98,80 @@ class ReportesService:
             pdf.cell(200, 10, txt="REPORTE FACTURACION MENSUAL", ln=True, align='C', border=1)
         
         # Contenido del reporte
-        if tipo_reporte in [1, 3, 4]:
+        if tipo_reporte in [ 3, 4]:
             for item in datos:
                 pdf.cell(200, 10, txt=str(item), ln=True)
         
         
         # Guardar el PDF con un nombre segun el tipo de reporte
         if tipo_reporte == 1:
+            resumen, detalle = datos
+
+            pdf.set_font("Arial", "B", 13)
+            pdf.ln(5)
+            pdf.cell(200, 8, txt="RESUMEN DE RESERVAS POR CLIENTE", ln=True)
+
+            # ============================
+            # RESUMEN GENERAL (nombre + total)
+            # ============================
+            pdf.set_font("Arial", size=11)
+            for fila in resumen:
+                dni, nombre, apellido, total = fila
+                pdf.cell(200, 7, txt=f"{dni} - {nombre} {apellido}  | Total: {total}", ln=True)
+
+            # ============================
+            # DETALLE POR CLIENTE
+            # ============================
+            pdf.ln(10)
+            pdf.set_font("Arial", "B", 13)
+            pdf.cell(200, 8, txt="DETALLE POR CLIENTE", ln=True)
+            pdf.ln(3)
+
+            # Agrupar detalles por cliente
+            detalle_por_cliente = {}
+            for fila in detalle:
+                dni, nombre, apellido, fecha, hi, hf, cancha, deporte = fila
+                key = f"{dni} - {nombre} {apellido}"
+                detalle_por_cliente.setdefault(key, []).append(
+                    (fecha, hi, hf, cancha, deporte)
+                )
+
+            # ============================
+            # TABLAS DE DETALLE
+            # ============================
+            for cliente, filas in detalle_por_cliente.items():
+                pdf.set_font("Arial", "B", 12)
+                pdf.cell(200, 8, txt=f"CLIENTE: {cliente}", ln=True)
+                pdf.set_font("Arial", size=11)
+                pdf.ln(2)
+
+                # Encabezado tabla
+                pdf.set_font("Arial", "B", 10)
+                pdf.set_fill_color(200, 200, 200)
+                pdf.cell(30, 8, "Fecha", border=1, align="C", fill=True)
+                pdf.cell(25, 8, "Inicio", border=1, align="C", fill=True)
+                pdf.cell(25, 8, "Fin", border=1, align="C", fill=True)
+                pdf.cell(60, 8, "Cancha", border=1, align="C", fill=True)
+                pdf.cell(40, 8, "Deporte", border=1, align="C", fill=True)
+                pdf.ln()
+
+                pdf.set_font("Arial", size=10)
+
+                for fila in filas:
+                    fecha, hi, hf, cancha, deporte = fila
+                    pdf.cell(30, 7, fecha, border=1)
+                    pdf.cell(25, 7, hi, border=1)
+                    pdf.cell(25, 7, hf, border=1)
+                    pdf.cell(60, 7, cancha, border=1)
+                    pdf.cell(40, 7, deporte, border=1)
+                    pdf.ln()
+
+                pdf.ln(5)
+
+                # Salto de página automático
+                if pdf.get_y() > 250:
+                    pdf.add_page()
+
             ruta = f"reporte_reservas_por_cliente_{date.today()}.pdf"
             pdf.output(ruta)
             self.abrir_pdf(ruta)
@@ -153,10 +222,7 @@ class ReportesService:
             
         if tipo_reporte == 5:
             resumen, detalle = datos
-
-            # --------------------------
-            # 1) RESUMEN MENSUAL
-            # --------------------------
+            #resumen mensual
             pdf.set_font("Arial", "B", 13)
             pdf.ln(5)
             pdf.cell(200, 8, txt="RESUMEN MENSUAL", ln=True)
@@ -167,10 +233,7 @@ class ReportesService:
                 total = fila[1]
                 pdf.cell(200, 7, txt=f"Mes: {mes}  -  Total: ${total:.2f}", ln=True)
 
-
-            # --------------------------
-            # 2) DETALLE — TABLA
-            # --------------------------
+            #resumen mensual  detallado
             pdf.ln(10)
             pdf.set_font("Arial", "B", 13)
             pdf.cell(200, 8, txt="DETALLE DE PAGOS", ln=True)

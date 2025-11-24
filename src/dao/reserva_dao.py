@@ -192,6 +192,38 @@ class ReservaDAO(IBaseDAO):
         conn.close()
         return result
     
+    #nuevo
+    def detalle_reservas_por_cliente(self):
+        """
+        Devuelve una lista de filas por cada reserva hecha por cada cliente.
+
+        Cada fila:
+        (dni, nombre, apellido, fecha, hora_inicio, hora_fin, cancha_nombre, deporte)
+        """
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        
+        cursor.execute("""
+            SELECT
+                c.dni,
+                c.nombre,
+                c.apellido,
+                r.fecha,
+                r.hora_inicio,
+                r.hora_fin,
+                ca.nombre AS cancha,
+                ca.tipo AS deporte
+            FROM reservas r
+            JOIN clientes c ON r.cliente_id = c.dni
+            JOIN canchas ca ON r.cancha_id = ca.id
+            ORDER BY c.dni, r.fecha, r.hora_inicio
+        """)
+
+        result = cursor.fetchall()
+        conn.close()
+        return result
+
+    
     # Reserva por cancha en periodo 
     def reservas_por_cancha_en_periodo(self, fecha_inicio, fecha_fin):
         conn = sqlite3.connect(self.db_path)
