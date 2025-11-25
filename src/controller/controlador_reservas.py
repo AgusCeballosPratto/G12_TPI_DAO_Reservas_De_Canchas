@@ -102,8 +102,10 @@ class ControladorReservas:
         return self.pagos_service.calcular_monto_reserva(reserva)
     
     # Torneos
-    def crear_torneo(self, torneo, reservas_ids=None):
-        return self.torneo_service.crear_torneo(torneo, reservas_ids)
+    # def crear_torneo(self, torneo, reservas_ids=None):
+    #     return self.torneo_service.crear_torneo(torneo, reservas_ids)
+    def crear_torneo(self, torneo, canchas_ids, fecha, hora_inicio, hora_fin):
+        return self.torneo_service.crear_torneo(torneo, canchas_ids, fecha, hora_inicio, hora_fin)
 
     def eliminar_torneo_id(self, id_torneo):
         return self.torneo_service.eliminar_torneo_id(id_torneo)
